@@ -573,19 +573,19 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                name: 'Sarah Johnson',
+                name: 'Sara Rashdi',
                 book: 'Teens Trouble Real Solutions',
                 text: 'This book completely changed how I communicate with my teenage daughter. The practical advice was easy to implement and made an immediate difference.',
                 rating: 5
               },
               {
-                name: 'Michael Chen',
+                name: 'Davis Babatude',
                 book: 'How to Source and Get Scholarships',
                 text: 'Thanks to this guide, I secured a full scholarship to study in Germany. The step-by-step approach made the complex application process manageable.',
                 rating: 5
               },
               {
-                name: 'Emma Williams',
+                name: 'Emmanuel Onwi',
                 book: 'Teens Trouble Real Solutions',
                 text: 'As a school counselor, I recommend this book to all parents. It offers realistic solutions to common teenage issues that actually work.',
                 rating: 5
