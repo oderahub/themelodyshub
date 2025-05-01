@@ -1,18 +1,27 @@
-"use client"
+'use client'
 
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import { getBookBySlug, getAllBooks } from "@/lib/books"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
-import { BookOpen, ShoppingCart, Star, ChevronLeft, Calendar, BookText, Globe, Hash } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useCart } from "@/context/cart-context"
-import { Separator } from "@/components/ui/separator"
-import { notFound } from "next/navigation"
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { getBookBySlug, getAllBooks } from '@/lib/books'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  BookOpen,
+  ShoppingCart,
+  Star,
+  ChevronLeft,
+  Calendar,
+  BookText,
+  Globe,
+  Hash
+} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useCart } from '@/context/cart-context'
+import { Separator } from '@/components/ui/separator'
+import { notFound } from 'next/navigation'
 
 export default function BookDetailsPage() {
   const params = useParams()
@@ -20,7 +29,7 @@ export default function BookDetailsPage() {
   const [book, setBook] = useState(getBookBySlug(slug))
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
-  const [activeTab, setActiveTab] = useState("details")
+  const [activeTab, setActiveTab] = useState('details')
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
 
   useEffect(() => {
@@ -70,7 +79,7 @@ export default function BookDetailsPage() {
             <div className="relative book-display perspective">
               <div className="book-3d transform-style preserve-3d rotate-y-30 hover:rotate-y-20 transition-transform duration-700 mx-auto">
                 <Image
-                  src={book.coverImage || "/placeholder.svg"}
+                  src={book.coverImage || '/placeholder.svg'}
                   alt={book.title}
                   width={350}
                   height={525}
@@ -114,7 +123,9 @@ export default function BookDetailsPage() {
               <div className="flex items-center mb-8">
                 <span className="text-3xl font-bold text-[#6055b0]">${book.price.toFixed(2)}</span>
                 {book.originalPrice > book.price && (
-                  <span className="ml-3 text-lg text-gray-500 line-through">${book.originalPrice.toFixed(2)}</span>
+                  <span className="ml-3 text-lg text-gray-500 line-through">
+                    ${book.originalPrice.toFixed(2)}
+                  </span>
                 )}
                 {book.originalPrice > book.price && (
                   <Badge className="ml-3 bg-green-500 text-white">
@@ -132,7 +143,9 @@ export default function BookDetailsPage() {
                   >
                     -
                   </Button>
-                  <div className="h-12 w-12 flex items-center justify-center text-lg font-medium">{quantity}</div>
+                  <div className="h-12 w-12 flex items-center justify-center text-lg font-medium">
+                    {quantity}
+                  </div>
                   <Button
                     variant="ghost"
                     className="h-12 w-12 rounded-none border-l"
@@ -201,7 +214,7 @@ export default function BookDetailsPage() {
             </TabsList>
             <div className="mt-8">
               <TabsContent value="details" className="text-gray-700 leading-relaxed space-y-4">
-                {book.longDescription.split("\n\n").map((paragraph, index) => (
+                {book.longDescription.split('\n\n').map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
               </TabsContent>
@@ -238,26 +251,26 @@ export default function BookDetailsPage() {
                     {/* Sample reviews */}
                     {[
                       {
-                        name: "Alex Thompson",
-                        date: "2 months ago",
+                        name: 'Thompson Ohaegbulam',
+                        date: '2 months ago',
                         rating: 5,
                         comment:
-                          "This book completely changed my approach to parenting my teenage son. The practical advice was easy to implement and I saw results almost immediately. Highly recommended for any parent struggling with communication issues.",
+                          'This book completely changed my approach to parenting my teenage son. The practical advice was easy to implement and I saw results almost immediately. Highly recommended for any parent struggling with communication issues.'
                       },
                       {
-                        name: "Jamie Rodriguez",
-                        date: "3 months ago",
+                        name: 'Jamie Sammuel',
+                        date: '3 months ago',
                         rating: 5,
                         comment:
-                          "I was skeptical at first, but this book offers genuine solutions that work in the real world. The author clearly understands the challenges of modern parenting. The chapter on digital boundaries was particularly helpful for our family.",
+                          'I was skeptical at first, but this book offers genuine solutions that work in the real world. The author clearly understands the challenges of modern parenting. The chapter on digital boundaries was particularly helpful for our family.'
                       },
                       {
-                        name: "Taylor Wilson",
-                        date: "4 months ago",
+                        name: 'Taylor Darlington',
+                        date: '4 months ago',
                         rating: 5,
                         comment:
-                          "As an educator, I've recommended this book to countless parents. It bridges the communication gap between parents and teens in a way that respects both perspectives. The real-life examples make the strategies easy to understand and apply.",
-                      },
+                          "As an educator, I've recommended this book to countless parents. It bridges the communication gap between parents and teens in a way that respects both perspectives. The real-life examples make the strategies easy to understand and apply."
+                      }
                     ].map((review, index) => (
                       <Card key={index}>
                         <CardContent className="p-6">
@@ -279,7 +292,9 @@ export default function BookDetailsPage() {
                       </Card>
                     ))}
 
-                    <Button className="w-full bg-gray-100 text-gray-800 hover:bg-gray-200">Load More Reviews</Button>
+                    <Button className="w-full bg-gray-100 text-gray-800 hover:bg-gray-200">
+                      Load More Reviews
+                    </Button>
                   </div>
                 </div>
               </TabsContent>
@@ -315,20 +330,20 @@ export default function BookDetailsPage() {
             </div>
             <div className="flex-1 overflow-y-auto p-6">
               <div className="prose max-w-none">
-                {book.previewContent.split("\n\n").map((paragraph, index) => {
-                  if (paragraph.startsWith("# ")) {
+                {book.previewContent.split('\n\n').map((paragraph, index) => {
+                  if (paragraph.startsWith('# ')) {
                     return (
                       <h1 key={index} className="text-3xl font-bold mt-8 mb-4">
                         {paragraph.substring(2)}
                       </h1>
                     )
-                  } else if (paragraph.startsWith("## ")) {
+                  } else if (paragraph.startsWith('## ')) {
                     return (
                       <h2 key={index} className="text-2xl font-bold mt-6 mb-3">
                         {paragraph.substring(3)}
                       </h2>
                     )
-                  } else if (paragraph.startsWith("### ")) {
+                  } else if (paragraph.startsWith('### ')) {
                     return (
                       <h3 key={index} className="text-xl font-bold mt-5 mb-2">
                         {paragraph.substring(4)}
@@ -346,7 +361,9 @@ export default function BookDetailsPage() {
             </div>
             <div className="p-4 border-t">
               <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-500">This is a preview. Purchase the book to read the full content.</p>
+                <p className="text-sm text-gray-500">
+                  This is a preview. Purchase the book to read the full content.
+                </p>
                 <Button
                   className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white"
                   onClick={() => {
@@ -375,7 +392,10 @@ export default function BookDetailsPage() {
             {getAllBooks()
               .filter((relatedBook) => relatedBook.id !== book.id)
               .map((relatedBook) => (
-                <Card key={relatedBook.id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <Card
+                  key={relatedBook.id}
+                  className="overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="relative h-[300px] bg-gradient-to-br from-[#92c4e4] to-[#5c87c7] overflow-hidden p-6 flex items-center justify-center">
                       <div className="absolute inset-0 opacity-30">
@@ -383,7 +403,7 @@ export default function BookDetailsPage() {
                         <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-[#6055b0]/30 blur-xl"></div>
                       </div>
                       <Image
-                        src={relatedBook.coverImage || "/placeholder.svg"}
+                        src={relatedBook.coverImage || '/placeholder.svg'}
                         alt={relatedBook.title}
                         width={150}
                         height={225}
@@ -392,7 +412,9 @@ export default function BookDetailsPage() {
                     </div>
                     <CardContent className="p-6 flex flex-col justify-between">
                       <div>
-                        <Badge className={`${relatedBook.badgeColor} text-white mb-2`}>{relatedBook.badge}</Badge>
+                        <Badge className={`${relatedBook.badgeColor} text-white mb-2`}>
+                          {relatedBook.badge}
+                        </Badge>
                         <h3 className="font-bold text-xl mb-2 text-gray-800 hover:text-[#5c87c7] transition-colors">
                           <Link href={`/books/${relatedBook.slug}`}>{relatedBook.title}</Link>
                         </h3>
@@ -400,7 +422,9 @@ export default function BookDetailsPage() {
                       </div>
                       <div>
                         <div className="flex items-center justify-between mb-4">
-                          <span className="font-bold text-xl text-[#6055b0]">${relatedBook.price.toFixed(2)}</span>
+                          <span className="font-bold text-xl text-[#6055b0]">
+                            ${relatedBook.price.toFixed(2)}
+                          </span>
                           {relatedBook.originalPrice > relatedBook.price && (
                             <span className="text-sm text-gray-500 line-through">
                               ${relatedBook.originalPrice.toFixed(2)}
