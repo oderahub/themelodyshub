@@ -85,8 +85,8 @@ export default function BookDetailsPage() {
                   height={525}
                   className="rounded-md shadow-2xl object-cover"
                 />
-                <div className="book-3d-spine"></div>
-                <div className="book-3d-side"></div>
+                {/* <div className="book-3d-spine"></div>
+                <div className="book-3d-side"></div> */}
               </div>
             </div>
             <div className="mt-8 flex justify-center">

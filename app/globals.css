@@ -73,6 +73,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  .book-3d-spine {
+    display: none !important; /* Completely hide the spine element */
+  }
 }
 
 /* Container width */

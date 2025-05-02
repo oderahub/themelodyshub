@@ -38,7 +38,7 @@ export const books: Book[] = [
     slug: 'study-abroad-guide-for-africans',
     price: 27.0,
     originalPrice: 34.99,
-    coverImage: '/book-covers/study-abroad-guide.svg',
+    coverImage: '/smart.jpg',
     description:
       'The ultimate guide for African students looking to study abroad, with strategies to maximize opportunities while minimizing costs.',
     longDescription: `"Study Abroad Guide for Africans" is an essential resource for African students with dreams of pursuing international education. This comprehensive guide addresses the unique challenges and opportunities that African students face when applying to universities abroad.
@@ -73,10 +73,6 @@ Whether you're a high school student planning your undergraduate education, a un
       'Chapter 10: Leveraging Your International Degree Back Home'
     ],
     previewContent: `# Chapter 1: Why Study Abroad? Benefits for African Students
-
-## The Modern Teenage Experience
-
-Today's teenagers face challenges that are both timeless and uniquely modern. The fundamental developmental tasks of adolescence remain the same as they have for generations: establishing identity, developing autonomy, and forming meaningful relationships. However, the context in which these developmental milestones occur has changed dramatically.
 
 ## Global Perspective, Local Impact
 
@@ -121,7 +117,7 @@ The financial burden can be significantly reduced through strategic scholarship 
     slug: 'teen-troubles-real-solutions',
     price: 15.0,
     originalPrice: 19.99,
-    coverImage: '/book-covers/teen-troubles.svg',
+    coverImage: './teen.jpeg',
     description:
       'A comprehensive guide to help teenagers and parents navigate the challenges of adolescence with practical, actionable solutions for common problems.',
     longDescription: `"Teen Troubles, Real Solutions" is the definitive guide for parents, educators, and teenagers themselves who are navigating the complex challenges of adolescence. Drawing from years of research and real-world experience, this book offers practical, actionable solutions to the most common problems teenagers face today.
@@ -198,7 +194,7 @@ Research has shown that the prefrontal cortex, responsible for judgment, decisio
     slug: 'overcoming-procrastination',
     price: 20.0,
     originalPrice: 24.99,
-    coverImage: '/book-covers/procrastination-guide.svg',
+    coverImage: './overcoming.jpeg',
     description:
       'A practical guide to getting things done, breaking the procrastination cycle, and achieving your goals through proven productivity techniques.',
     longDescription: `"Overcoming Procrastination" is a transformative guide for anyone who struggles with putting things off, missing deadlines, or feeling overwhelmed by their to-do list. This practical book cuts through the noise of productivity advice to deliver a science-backed system for breaking the procrastination habit once and for all.
