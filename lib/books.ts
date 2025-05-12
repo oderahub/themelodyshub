@@ -38,7 +38,7 @@ export const books: Book[] = [
     slug: 'study-abroad-guide-for-africans',
     price: 27.0,
     originalPrice: 34.99,
-    coverImage: '/smart.jpg',
+    coverImage: '/smart.png',
     description:
       'The ultimate guide for African students looking to study abroad, with strategies to maximize opportunities while minimizing costs.',
     longDescription: `"Study Abroad Guide for Africans" is an essential resource for African students with dreams of pursuing international education. This comprehensive guide addresses the unique challenges and opportunities that African students face when applying to universities abroad.
