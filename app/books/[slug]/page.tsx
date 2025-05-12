@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { getBookBySlug, getAllBooks } from '@/lib/books'
+import { getBookBySlug, getAllBooks, type Book } from '@/lib/books'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -22,18 +22,28 @@ import Link from 'next/link'
 import { useCart } from '@/context/cart-context'
 import { Separator } from '@/components/ui/separator'
 import { notFound } from 'next/navigation'
+import { useToast } from "@/components/ui/use-toast"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
 
 export default function BookDetailsPage() {
+  console.log('BookDetailsPage component rendering')
+  
   const params = useParams()
   const slug = params?.slug as string
-  const [book, setBook] = useState(getBookBySlug(slug))
+  const [book, setBook] = useState<Book | null>(null)
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
-  const [activeTab, setActiveTab] = useState('details')
+  const [activeTab, setActiveTab] = useState("details")
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
-    // This is needed because the component might render with initial state before params are available
     if (slug) {
       const foundBook = getBookBySlug(slug)
       if (!foundBook) {
@@ -49,10 +59,35 @@ export default function BookDetailsPage() {
 
   const handleAddToCart = () => {
     addItem(book, quantity)
+    toast({
+      title: "Added to cart",
+      description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${book.title}" added to your cart`,
+      duration: 3000,
+    })
+    setQuantity(1)
   }
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Preview Dialog */}
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Book Preview</DialogTitle>
+            <DialogDescription>
+              Preview of {book.title} by {book.author}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="prose prose-lg max-w-none">
+            {book.previewContent ? (
+              <div dangerouslySetInnerHTML={{ __html: book.previewContent }} />
+            ) : (
+              <p>Preview content not available for this book.</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Breadcrumb */}
       <div className="bg-gray-50 py-4 border-b">
         <div className="container">
@@ -83,7 +118,7 @@ export default function BookDetailsPage() {
                   alt={book.title}
                   width={350}
                   height={525}
-                  className="rounded-md shadow-2xl object-cover"
+                  className="rounded-md shadow-2xl object-cover w-auto"
                 />
                 {/* <div className="book-3d-spine"></div>
                 <div className="book-3d-side"></div> */}
@@ -156,11 +191,13 @@ export default function BookDetailsPage() {
                 </div>
 
                 <Button
-                  className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg px-8 h-12 text-lg"
+                  className={`bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg px-8 h-12 text-lg relative`}
                   onClick={handleAddToCart}
                 >
-                  <ShoppingCart className="mr-2 h-5 w-5" />
-                  Add to Cart
+                  <div className="flex items-center">
+                    <ShoppingCart className="mr-2 h-5 w-5" />
+                    Add to Cart
+                  </div>
                 </Button>
               </div>
             </div>
@@ -302,83 +339,6 @@ export default function BookDetailsPage() {
           </Tabs>
         </div>
       </div>
-
-      {/* Book Preview Modal */}
-      {isPreviewOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h3 className="text-xl font-bold">Book Preview: {book.title}</h3>
-              <Button variant="ghost" size="icon" onClick={() => setIsPreviewOpen(false)}>
-                <span className="sr-only">Close</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-x"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </Button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="prose max-w-none">
-                {book.previewContent.split('\n\n').map((paragraph, index) => {
-                  if (paragraph.startsWith('# ')) {
-                    return (
-                      <h1 key={index} className="text-3xl font-bold mt-8 mb-4">
-                        {paragraph.substring(2)}
-                      </h1>
-                    )
-                  } else if (paragraph.startsWith('## ')) {
-                    return (
-                      <h2 key={index} className="text-2xl font-bold mt-6 mb-3">
-                        {paragraph.substring(3)}
-                      </h2>
-                    )
-                  } else if (paragraph.startsWith('### ')) {
-                    return (
-                      <h3 key={index} className="text-xl font-bold mt-5 mb-2">
-                        {paragraph.substring(4)}
-                      </h3>
-                    )
-                  } else {
-                    return (
-                      <p key={index} className="mb-4 text-gray-700 leading-relaxed">
-                        {paragraph}
-                      </p>
-                    )
-                  }
-                })}
-              </div>
-            </div>
-            <div className="p-4 border-t">
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-500">
-                  This is a preview. Purchase the book to read the full content.
-                </p>
-                <Button
-                  className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white"
-                  onClick={() => {
-                    handleAddToCart()
-                    setIsPreviewOpen(false)
-                  }}
-                >
-                  <ShoppingCart className="mr-2 h-4 w-4" />
-                  Add to Cart
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Related Books */}
       <div className="bg-gray-50 py-16">

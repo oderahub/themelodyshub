@@ -77,7 +77,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0)
-
   const subtotal = items.reduce((total, item) => total + item.book.price * item.quantity, 0)
 
   return (

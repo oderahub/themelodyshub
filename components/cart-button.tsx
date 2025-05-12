@@ -12,6 +12,7 @@ import {
   SheetTrigger,
   SheetFooter,
   SheetClose,
+  SheetDescription,
 } from "@/components/ui/sheet"
 import Image from "next/image"
 import Link from "next/link"
@@ -37,6 +38,11 @@ export function CartButton() {
       <SheetContent className="w-full sm:max-w-md flex flex-col">
         <SheetHeader>
           <SheetTitle className="text-2xl font-bold">Your Cart</SheetTitle>
+          <SheetDescription>
+            {itemCount === 0 
+              ? "Your cart is empty. Add some books to get started!"
+              : `You have ${itemCount} item${itemCount === 1 ? '' : 's'} in your cart.`}
+          </SheetDescription>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto py-4">
