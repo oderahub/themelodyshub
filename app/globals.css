@@ -140,7 +140,7 @@
   }
 }
 
-@keyframes rotate3D {
+/* @keyframes rotate3D {
   0% {
     transform: rotateY(0deg) rotateX(0deg);
   }
@@ -150,7 +150,7 @@
   100% {
     transform: rotateY(360deg) rotateX(0deg);
   }
-}
+} */
 
 /* Scatter animation */
 @keyframes scatter {
@@ -205,20 +205,15 @@
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
 
-.animate-rotate3D {
+/* .animate-rotate3D {
   animation: rotate3D 10s linear infinite;
   transform-style: preserve-3d;
-}
+} */
 
 .animate-reorder {
   animation: reorder 2s ease-in-out;
@@ -286,4 +281,3 @@
     background-position: 0% 50%;
   }
 }
-

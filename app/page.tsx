@@ -353,7 +353,6 @@ export default function Home() {
                 challenges.
               </p>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {books.map((book, index) => (
                 <div
@@ -367,10 +366,8 @@ export default function Home() {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                   <div className="p-6">
-                    <div className="book-display mb-6 animate-rotate3D">
+                    <div className="book-display mb-6">
                       <div className="book-3d">
-                        <div className="book-3d-spine"></div>
-                        <div className="book-3d-side"></div>
                         <Image
                           src={book.coverImage || '/placeholder.svg'}
                           alt={book.title}
@@ -384,9 +381,22 @@ export default function Home() {
                       {book.title}
                     </h3>
                     <p className="text-muted-foreground mb-4">{book.description}</p>
-                    <Button className="w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300 gradient-animate">
-                      Learn More
-                    </Button>
+                    <div className="flex gap-4">
+                      <Button
+                        className="flex-1 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300 gradient-animate"
+                        onClick={() => addItem(book)}
+                      >
+                        <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+                      </Button>
+                      <Link href={`/books/${book.slug}`}>
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-2 border-[#5c87c7] text-[#5c87c7] hover:bg-[#5c87c7]/10 py-6 transition-all duration-300"
+                        >
+                          Learn More
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               ))}
