@@ -27,12 +27,12 @@ export default function Home() {
   const [scrollPosition, setScrollPosition] = useState(0)
   const [startScatter, setStartScatter] = useState(false)
   const [animatedElements, setAnimatedElements] = useState<{
-    books: boolean;
-    features: boolean;
-    about: boolean;
-    testimonials: boolean;
-    newsletter: boolean;
-    contact: boolean;
+    books: boolean
+    features: boolean
+    about: boolean
+    testimonials: boolean
+    newsletter: boolean
+    contact: boolean
   }>({
     books: false,
     features: false,
@@ -248,20 +248,14 @@ export default function Home() {
                 Bestseller
               </Badge>
               <h1 className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                <span 
-                  className="block text-foreground opacity-90 animate-slideInUp scatter-animation scatter-animation-1"
-                >
+                <span className="block text-foreground opacity-90 animate-slideInUp scatter-animation scatter-animation-1">
                   Discover
                 </span>
-                <span 
-                  className="block bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent animate-slideInUp scatter-animation scatter-animation-2"
-                >
+                <span className="block bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent animate-slideInUp scatter-animation scatter-animation-2">
                   Life-Changing
                 </span>
-                <span 
-                  className="block text-foreground opacity-90 animate-slideInUp scatter-animation scatter-animation-3"
-                >
-                  Books
+                <span className="block text-foreground opacity-90 animate-slideInUp scatter-animation scatter-animation-3">
+                  E-Books
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-md leading-relaxed animate-fadeIn delay-500">
@@ -282,7 +276,7 @@ export default function Home() {
                   Explore Collection
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button
+                {/* <Button
                   size="lg"
                   variant="outline"
                   className="border-2 border-[#5c87c7] text-[#5c87c7] hover:bg-[#5c87c7]/10 text-lg px-8 py-6 transition-all duration-300"
@@ -294,7 +288,7 @@ export default function Home() {
                   }}
                 >
                   About the Author
-                </Button>
+                </Button> */}
               </div>
             </div>
             <div className="relative z-10">
@@ -349,7 +343,7 @@ export default function Home() {
               }`}
             >
               <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-foreground hover:opacity-90 px-4 py-1.5 text-sm border-0 mb-4 shadow-md animate-pulse">
-                Featured Books
+                Featured E-Books
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent gradient-animate">
                 Our Collection
@@ -365,7 +359,9 @@ export default function Home() {
                 <div
                   key={book.id}
                   className={`group relative bg-card rounded-xl shadow-lg overflow-hidden hover-lift transition-all duration-300 ${
-                    animatedElements['books'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                    animatedElements['books']
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-10'
                   }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
@@ -431,10 +427,10 @@ export default function Home() {
               }`}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground drop-shadow-md">
-                Why Our Books Stand Out
+                Why Our E-Books Stand Out
               </h2>
               <p className="text-foreground/90 max-w-2xl mx-auto text-lg">
-                Our books are designed to provide practical, actionable advice that you can
+                Our E-books are designed to provide practical, actionable advice that you can
                 implement immediately.
               </p>
             </div>
@@ -501,7 +497,7 @@ export default function Home() {
                 <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] opacity-30 blur-3xl"></div>
                 <div className="relative h-[500px] w-full rounded-2xl overflow-hidden border-4 border-[#92c4e4]/50 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:scale-[1.02] transition-transform duration-700">
                   <Image
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop"
+                    src="/main.jpg"
                     alt="Author"
                     className="h-full w-full object-cover transform hover:scale-105 transition-transform duration-700"
                     width={600}
@@ -530,9 +526,12 @@ export default function Home() {
                   Meet the Expert Behind the Books
                 </h2>
                 <p className="text-foreground text-lg leading-relaxed">
-                  With years of experience working with teenagers and scholarship applicants, our
-                  author has helped thousands of people overcome challenges and achieve their
-                  dreams.
+                  Melody Okere is a dedicated author with a background in business and technology,
+                  passionate about providing practical solutions through her writing. She creates
+                  insightful and actionable guides to help readers overcome challenges, achieve
+                  their goals, and navigate life’s important decisions with confidence. With years
+                  of experience working with teenagers and scholarship applicants, our author has
+                  helped thousands of people overcome challenges and achieve their dreams.
                 </p>
                 <p className="text-foreground text-lg leading-relaxed">
                   Each book is crafted with care, drawing from personal experiences and a deep
