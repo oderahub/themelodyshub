@@ -45,7 +45,7 @@ export default function Home() {
   const books = getAllBooks()
 
   // Refs for intersection observer
-  const sectionsRef = useRef<HTMLDivElement[]>([])
+  const sectionsRef = useRef([])
 
   useEffect(() => {
     // Hide splash screen after 4 seconds
@@ -90,13 +90,6 @@ export default function Home() {
       clearTimeout(scatterTimer)
     }
   }, [])
-
-  // Update the ref callback
-  const setRef = (index: number) => (el: HTMLDivElement | null) => {
-    if (el) {
-      sectionsRef.current[index] = el
-    }
-  }
 
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans">
@@ -243,7 +236,7 @@ export default function Home() {
           <div className="absolute -right-64 top-32 w-96 h-96 rounded-full bg-[#6055b0]/20 blur-3xl"></div>
 
           <div className="container relative grid gap-8 md:grid-cols-2 items-center">
-            <div className="space-y-8 z-10 animate-fadeIn" ref={setRef(0)}>
+            <div className="space-y-8 z-10 animate-fadeIn" ref={useRef(0)}>
               <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-foreground hover:opacity-90 px-4 py-1.5 text-sm border-0 shadow-md animate-pulse">
                 Bestseller
               </Badge>
@@ -317,7 +310,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
           {/* Floating elements */}
           <div
             className="absolute top-1/4 left-10 w-20 h-20 rounded-full border-2 border-[#92c4e4]/30 animate-float"
@@ -335,24 +327,25 @@ export default function Home() {
 
         {/* Featured Books */}
         <section id="books" className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#92c4e4] to-[#6055b0] opacity-5 animate-shimmer"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#92c4e4] to-[#6055b0] opacity-5"></div>
           <div className="container relative z-10">
             <div
               className={`text-center mb-16 transition-all duration-1000 ${
                 animatedElements['books'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
             >
-              <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-foreground hover:opacity-90 px-4 py-1.5 text-sm border-0 mb-4 shadow-md animate-pulse">
-                Featured E-Books
+              <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-white hover:opacity-90 px-4 py-1.5 text-sm border-0 mb-4 shadow-md">
+                Featured Books
               </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent gradient-animate">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent">
                 Our Collection
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
                 Explore our collection of practical guides that will help you navigate life's
                 challenges.
               </p>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {books.map((book, index) => (
                 <div
@@ -381,17 +374,31 @@ export default function Home() {
                       {book.title}
                     </h3>
                     <p className="text-muted-foreground mb-4">{book.description}</p>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 relative z-50 pointer-events-auto">
                       <Button
-                        className="flex-1 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300 gradient-animate"
-                        onClick={() => addItem(book)}
+                        className="flex-1 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300 cursor-pointer pointer-events-auto"
+                        onClick={(e) => {
+                          console.log('Button clicked - event received')
+                          e.preventDefault()
+                          e.stopPropagation()
+                          console.log('Add to Cart clicked for book:', book.title)
+                          try {
+                            addItem(book)
+                            console.log('addItem function called successfully')
+                          } catch (error) {
+                            console.error('Error adding item to cart:', error)
+                          }
+                        }}
                       >
                         <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
                       </Button>
-                      <Link href={`/books/${book.slug}`}>
+                      <Link href={`/books/${book.slug}`} className="pointer-events-auto">
                         <Button
                           variant="outline"
-                          className="flex-1 border-2 border-[#5c87c7] text-[#5c87c7] hover:bg-[#5c87c7]/10 py-6 transition-all duration-300"
+                          className="flex-1 border-2 border-[#5c87c7] text-[#5c87c7] hover:bg-[#5c87c7]/10 py-6 transition-all duration-300 cursor-pointer pointer-events-auto"
+                          onClick={() => {
+                            console.log('Learn More clicked for book:', book.title)
+                          }}
                         >
                           Learn More
                         </Button>
@@ -409,7 +416,7 @@ export default function Home() {
             >
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-xl hover:translate-y-0.5 border-0 text-lg px-8 py-6 shadow-lg transition-all duration-300 group"
+                className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-xl hover:translate-y-0.5 border-0 text-lg px-8 py-6 shadow-lg transition-all duration-300 group"
               >
                 View All Books
                 <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -418,6 +425,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Rest of the page content remains the same */}
         {/* Book Features */}
         <section
           id="features"
@@ -425,7 +433,7 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-pattern opacity-5"></div>
           {/* Decorative circles */}
-          <div className="absolute -top-40 -left-40 w-80 h-80 rounded-full bg-background/10 blur-3xl"></div>
+          <div className="absolute -top-40 -left-40 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
           <div className="absolute -bottom-40 -right-40 w-80 h-80 rounded-full bg-[#6055b0]/20 blur-3xl"></div>
 
           <div className="container relative z-10">
@@ -436,11 +444,11 @@ export default function Home() {
                   : 'opacity-0 translate-y-10'
               }`}
             >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground drop-shadow-md">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-md">
                 Why Our E-Books Stand Out
               </h2>
-              <p className="text-foreground/90 max-w-2xl mx-auto text-lg">
-                Our E-books are designed to provide practical, actionable advice that you can
+              <p className="text-white/90 max-w-2xl mx-auto text-lg">
+                Our books are designed to provide practical, actionable advice that you can
                 implement immediately.
               </p>
             </div>
@@ -472,16 +480,16 @@ export default function Home() {
                       : 'opacity-0 translate-y-10'
                   }`}
                 >
-                  <Card className="bg-background/90 backdrop-blur-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-0 group overflow-hidden">
+                  <Card className="bg-white/90 backdrop-blur-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-0 group overflow-hidden">
                     <CardContent className="p-8 text-center relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-[#5c87c7]/5 to-[#6055b0]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="text-5xl mb-6 transform group-hover:scale-110 transition-transform duration-300 relative z-10">
                         {feature.icon}
                       </div>
-                      <h3 className="text-2xl font-bold mb-4 text-foreground group-hover:text-[#5c87c7] transition-colors duration-300 relative z-10">
+                      <h3 className="text-2xl font-bold mb-4 text-[#6055b0] group-hover:text-[#5c87c7] transition-colors duration-300 relative z-10">
                         {feature.title}
                       </h3>
-                      <p className="text-foreground relative z-10 leading-relaxed">
+                      <p className="text-gray-600 relative z-10 leading-relaxed">
                         {feature.description}
                       </p>
                     </CardContent>
@@ -539,9 +547,7 @@ export default function Home() {
                   Melody Okere is a dedicated author with a background in business and technology,
                   passionate about providing practical solutions through her writing. She creates
                   insightful and actionable guides to help readers overcome challenges, achieve
-                  their goals, and navigate life’s important decisions with confidence. With years
-                  of experience working with teenagers and scholarship applicants, our author has
-                  helped thousands of people overcome challenges and achieve their dreams.
+                  their goals, and navigate life's important decisions with confidence.
                 </p>
                 <p className="text-foreground text-lg leading-relaxed">
                   Each book is crafted with care, drawing from personal experiences and a deep
@@ -588,13 +594,13 @@ export default function Home() {
                   : 'opacity-0 translate-y-10'
               }`}
             >
-              <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-foreground hover:opacity-90 px-4 py-1.5 text-sm border-0 mb-4 shadow-md">
+              <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-white hover:opacity-90 px-4 py-1.5 text-sm border-0 mb-4 shadow-md">
                 Reader Reviews
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent">
                 What Readers Say
               </h2>
-              <p className="text-foreground max-w-2xl mx-auto text-lg">
+              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
                 Discover why readers around the world love our books.
               </p>
             </div>
@@ -602,21 +608,20 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  name: 'Sara Rashdi',
+                  name: 'Sarah Johnson',
                   book: 'Teens Trouble Real Solutions',
                   text: 'This book completely changed how I communicate with my teenage daughter. The practical advice was easy to implement and made an immediate difference.',
                   rating: 5
                 },
                 {
-                  name: 'Davis Babatude',
+                  name: 'Michael Chen',
                   book: 'How to Source and Get Scholarships',
                   text: 'Thanks to this guide, I secured a full scholarship to study in Germany. The step-by-step approach made the complex application process manageable.',
                   rating: 5
                 },
                 {
-                  name: 'Emmanuel Onwi',
+                  name: 'Emma Williams',
                   book: 'Teens Trouble Real Solutions',
-                  data: '2024-10-15',
                   text: 'As a school counselor, I recommend this book to all parents. It offers realistic solutions to common teenage issues that actually work.',
                   rating: 5
                 }
@@ -629,7 +634,7 @@ export default function Home() {
                       : 'opacity-0 translate-y-10'
                   }`}
                 >
-                  <Card className="bg-background hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-[#92c4e4] group overflow-hidden">
+                  <Card className="bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-[#92c4e4] group overflow-hidden">
                     <CardContent className="p-8">
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                       <div className="flex mb-6">
@@ -639,15 +644,15 @@ export default function Home() {
                             <Star key={i} className="h-6 w-6 fill-[#5c87c7] text-[#5c87c7]" />
                           ))}
                       </div>
-                      <p className="text-foreground mb-6 text-lg italic leading-relaxed">
+                      <p className="text-gray-600 mb-6 text-lg italic leading-relaxed">
                         "{testimonial.text}"
                       </p>
                       <div className="flex items-center gap-4">
-                        <div className="h-14 w-14 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] flex items-center justify-center text-foreground font-bold text-xl shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                        <div className="h-14 w-14 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] flex items-center justify-center text-white font-bold text-xl shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
                           {testimonial.name.charAt(0)}
                         </div>
                         <div>
-                          <span className="font-medium text-lg text-foreground block">
+                          <span className="font-medium text-lg text-gray-800 block">
                             {testimonial.name}
                           </span>
                           <span className="text-sm text-[#6055b0]">
@@ -672,14 +677,14 @@ export default function Home() {
               }`}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#92c4e4] to-[#6055b0] rounded-3xl blur-3xl opacity-20"></div>
-              <div className="relative bg-background rounded-3xl p-10 md:p-16 border border-[#92c4e4] shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <div className="relative bg-white rounded-3xl p-10 md:p-16 border border-[#92c4e4] shadow-xl hover:shadow-2xl transition-shadow duration-300">
                 <div className="absolute -top-10 -left-10 w-20 h-20 border-t-4 border-l-4 border-[#5c87c7]/50 rounded-tl-3xl"></div>
                 <div className="absolute -bottom-10 -right-10 w-20 h-20 border-b-4 border-r-4 border-[#5c87c7]/50 rounded-br-3xl"></div>
 
                 <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#5c87c7] to-[#6055b0] mb-6 text-center">
                   Stay Updated with New Releases
                 </h2>
-                <p className="text-foreground mb-8 text-center text-lg leading-relaxed">
+                <p className="text-gray-600 mb-8 text-center text-lg leading-relaxed">
                   Subscribe to our newsletter and be the first to know about new books, exclusive
                   offers, and author events.
                 </p>
@@ -687,9 +692,9 @@ export default function Home() {
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="px-6 py-4 rounded-lg flex-1 border-2 border-[#92c4e4] text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
+                    className="px-6 py-4 rounded-lg flex-1 border-2 border-[#92c4e4] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
                   />
-                  <Button className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300">
+                  <Button className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300">
                     Subscribe
                   </Button>
                 </div>
@@ -710,31 +715,31 @@ export default function Home() {
                     : 'opacity-0 -translate-x-20'
                 }`}
               >
-                <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-foreground hover:opacity-90 px-4 py-1.5 text-sm border-0 shadow-md">
+                <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-white hover:opacity-90 px-4 py-1.5 text-sm border-0 shadow-md">
                   Get in Touch
                 </Badge>
                 <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent">
                   Have Questions?
                 </h2>
-                <p className="text-foreground text-lg leading-relaxed">
+                <p className="text-gray-600 text-lg leading-relaxed">
                   Whether you're interested in bulk orders for schools, speaking engagements, or
                   just want to share your thoughts, we'd love to hear from you.
                 </p>
 
                 <div className="space-y-6">
                   <div className="flex items-center gap-4 group">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] flex items-center justify-center text-foreground shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
                       <Mail className="h-6 w-6" />
                     </div>
-                    <span className="text-foreground text-lg group-hover:text-[#5c87c7] transition-colors duration-300">
+                    <span className="text-gray-600 text-lg group-hover:text-[#5c87c7] transition-colors duration-300">
                       contact@melodyshub.com
                     </span>
                   </div>
                   <div className="flex items-center gap-4 group">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] flex items-center justify-center text-foreground shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
                       <Instagram className="h-6 w-6" />
                     </div>
-                    <span className="text-foreground text-lg group-hover:text-[#5c87c7] transition-colors duration-300">
+                    <span className="text-gray-600 text-lg group-hover:text-[#5c87c7] transition-colors duration-300">
                       @melodyshub
                     </span>
                   </div>
@@ -753,35 +758,35 @@ export default function Home() {
                     <form className="space-y-6">
                       <div className="grid sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground">Name</label>
+                          <label className="text-sm font-medium text-gray-700">Name</label>
                           <input
                             type="text"
-                            className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
+                            className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground">Email</label>
+                          <label className="text-sm font-medium text-gray-700">Email</label>
                           <input
                             type="email"
-                            className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
+                            className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
                           />
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground">Subject</label>
+                        <label className="text-sm font-medium text-gray-700">Subject</label>
                         <input
                           type="text"
-                          className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
+                          className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground">Message</label>
+                        <label className="text-sm font-medium text-gray-700">Message</label>
                         <textarea
                           rows={4}
-                          className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
+                          className="w-full px-4 py-3 border-2 border-[#92c4e4] rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#5c87c7] transition-all duration-300"
                         ></textarea>
                       </div>
-                      <Button className="w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-4 text-lg shadow-md transition-all duration-300 group">
+                      <Button className="w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-4 text-lg shadow-md transition-all duration-300 group">
                         <span className="group-hover:translate-x-1 transition-transform duration-300">
                           Send Message
                         </span>
@@ -919,179 +924,172 @@ export default function Home() {
             </div>
           </div>
         </footer>
+
+        {/* CSS for animations and 3D book effects */}
+        <style jsx global>{`
+          /* Animation classes */
+          .animate-fadeIn {
+            animation: fadeIn 1s ease forwards;
+          }
+
+          .animate-slideInUp {
+            animation: slideInUp 1s ease forwards;
+          }
+
+          .animate-float {
+            animation: float 6s ease-in-out infinite;
+          }
+
+          .delay-200 {
+            animation-delay: 200ms;
+          }
+
+          .delay-300 {
+            animation-delay: 300ms;
+          }
+
+          .delay-500 {
+            animation-delay: 500ms;
+          }
+
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+
+          @keyframes slideInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes float {
+            0%,
+            100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(-20px);
+            }
+          }
+
+          /* 3D Book effects */
+          .perspective {
+            perspective: 1000px;
+          }
+
+          .transform-style {
+            transform-style: preserve-3d;
+          }
+
+          .book-container {
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+          }
+
+          .book {
+            position: relative;
+            width: 300px;
+            height: 450px;
+            transform-style: preserve-3d;
+            transform: rotateY(-30deg);
+            transition: transform 1s ease;
+          }
+
+          .book:hover {
+            transform: rotateY(-15deg);
+          }
+
+          .book-cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transform: translateZ(0px);
+            transition: transform 0.5s;
+            z-index: 2;
+          }
+
+          .book-spine {
+            position: absolute;
+            width: 40px;
+            height: 100%;
+            left: -20px;
+            top: 0;
+            transform: rotateY(90deg) translateZ(150px);
+            background: linear-gradient(90deg, #92c4e4 0%, #5c87c7 100%);
+            transform-origin: right;
+          }
+
+          .book-side {
+            position: absolute;
+            width: 300px;
+            height: 450px;
+            top: 0;
+            transform: translateZ(-20px);
+            background: #f5f5f5;
+            border-left: 1px solid #ddd;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
+          }
+
+          /* Book display in cards */
+          .book-display {
+            perspective: 1000px;
+          }
+
+          .book-3d {
+            position: relative;
+            width: 250px;
+            height: 375px;
+            transform-style: preserve-3d;
+          }
+
+          .rotate-y-30 {
+            transform: rotateY(30deg);
+          }
+
+          .rotate-y-20 {
+            transform: rotateY(20deg);
+          }
+
+          .book-3d-spine {
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            left: -15px;
+            top: 0;
+            transform: rotateY(90deg) translateZ(125px);
+            background: linear-gradient(90deg, #5c87c7 0%, #6055b0 100%);
+            transform-origin: right;
+          }
+
+          .book-3d-side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            transform: translateZ(-15px);
+            background: #f5f5f5;
+            border-left: 1px solid #ddd;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+          }
+
+          /* Background pattern */
+          .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+          }
+        `}</style>
       </div>
-
-      {/* CSS for animations and 3D book effects */}
-      <style jsx global>{`
-        /* Animation classes */
-        .animate-fadeIn {
-          animation: fadeIn 1s ease forwards;
-        }
-
-        .animate-slideInUp {
-          animation: slideInUp 1s ease forwards;
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .delay-200 {
-          animation-delay: 200ms;
-        }
-
-        .delay-300 {
-          animation-delay: 300ms;
-        }
-
-        .delay-500 {
-          animation-delay: 500ms;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-
-        /* Splash screen animation */
-        @keyframes animate-gradient {
-          to {
-            background-position: 200%;
-          }
-        }
-
-        /* 3D Book effects */
-        .perspective {
-          perspective: 1000px;
-        }
-
-        .transform-style {
-          transform-style: preserve-3d;
-        }
-
-        .book-container {
-          transform-style: preserve-3d;
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .book {
-          position: relative;
-          width: 300px;
-          height: 450px;
-          transform-style: preserve-3d;
-          transform: rotateY(-30deg);
-          transition: transform 1s ease;
-        }
-
-        .book:hover {
-          transform: rotateY(-15deg);
-        }
-
-        .book-cover {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          transform-origin: left;
-          transform-style: preserve-3d;
-          transform: translateZ(0px);
-          transition: transform 0.5s;
-          z-index: 2;
-        }
-
-        .book-spine {
-          position: absolute;
-          width: 40px;
-          height: 100%;
-          left: -20px;
-          top: 0;
-          transform: rotateY(90deg) translateZ(150px);
-          background: linear-gradient(90deg, #92c4e4 0%, #5c87c7 100%);
-          transform-origin: right;
-        }
-
-        .book-side {
-          position: absolute;
-          width: 300px;
-          height: 450px;
-          top: 0;
-          transform: translateZ(-20px);
-          background: #f5f5f5;
-          border-left: 1px solid #ddd;
-          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Book display in cards */
-        .book-display {
-          perspective: 1000px;
-        }
-
-        .book-3d {
-          position: relative;
-          width: 250px;
-          height: 375px;
-          transform-style: preserve-3d;
-        }
-
-        .rotate-y-30 {
-          transform: rotateY(30deg);
-        }
-
-        .rotate-y-20 {
-          transform: rotateY(20deg);
-        }
-
-        .book-3d-spine {
-          position: absolute;
-          width: 30px;
-          height: 100%;
-          left: -15px;
-          top: 0;
-          transform: rotateY(90deg) translateZ(125px);
-          background: linear-gradient(90deg, #5c87c7 0%, #6055b0 100%);
-          transform-origin: right;
-        }
-
-        .book-3d-side {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          top: 0;
-          transform: translateZ(-15px);
-          background: #f5f5f5;
-          border-left: 1px solid #ddd;
-          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Background pattern */
-        .bg-pattern {
-          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-      `}</style>
     </div>
   )
 }

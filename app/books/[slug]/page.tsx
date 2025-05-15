@@ -22,24 +22,24 @@ import Link from 'next/link'
 import { useCart } from '@/context/cart-context'
 import { Separator } from '@/components/ui/separator'
 import { notFound } from 'next/navigation'
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from '@/components/ui/use-toast'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog"
+  DialogDescription
+} from '@/components/ui/dialog'
 
 export default function BookDetailsPage() {
   console.log('BookDetailsPage component rendering')
-  
+
   const params = useParams()
   const slug = params?.slug as string
   const [book, setBook] = useState<Book | null>(null)
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
-  const [activeTab, setActiveTab] = useState("details")
+  const [activeTab, setActiveTab] = useState('details')
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const { toast } = useToast()
 
@@ -60,9 +60,11 @@ export default function BookDetailsPage() {
   const handleAddToCart = () => {
     addItem(book, quantity)
     toast({
-      title: "Added to cart",
-      description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${book.title}" added to your cart`,
-      duration: 3000,
+      title: 'Added to cart',
+      description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${
+        book.title
+      }" added to your cart`,
+      duration: 3000
     })
     setQuantity(1)
   }
@@ -191,7 +193,7 @@ export default function BookDetailsPage() {
                 </div>
 
                 <Button
-                  className={`bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg px-8 h-12 text-lg relative`}
+                  className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 px-8 h-12 text-lg relative transition-all duration-300"
                   onClick={handleAddToCart}
                 >
                   <div className="flex items-center">
