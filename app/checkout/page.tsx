@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -17,7 +17,10 @@ import { ChevronLeft, CreditCard, ShieldCheck, Truck } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { PaystackPayment } from "@/components/PaystackPayment"
+import dynamic from "next/dynamic"
+
+// Import PaystackPayment component dynamically with SSR disabled
+const PaystackPayment = dynamic(() => import("@/components/PaystackPayment"), { ssr: false })
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -43,6 +46,12 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
   const [orderNumber, setOrderNumber] = useState("")
+  const [isBrowser, setIsBrowser] = useState(false)
+
+  // Set isBrowser to true once the component is mounted
+  useEffect(() => {
+    setIsBrowser(true)
+  }, [])
 
   const shipping = 4.99
   const tax = subtotal * 0.07
@@ -367,7 +376,7 @@ export default function CheckoutPage() {
                     </div>
                   </RadioGroup>
 
-                  {paymentMethod === "paystack" && (
+                  {paymentMethod === "paystack" && isBrowser && (
                     <div className="mt-6">
                       <PaystackPayment
                         email={formState.email}

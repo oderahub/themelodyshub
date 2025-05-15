@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { getAllBooks } from '@/lib/books'
-import { CartButton } from '@/components/cart-button'
+import { CartButton } from '@/components/CartButton'
 import { useCart } from '@/context/cart-context'
 
 export default function Home() {
