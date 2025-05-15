@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useCart } from "@/context/cart-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -12,14 +13,14 @@ import { BookOpen, ChevronLeft, Minus, Plus, ShoppingCart, Trash2 } from "lucide
 import { Badge } from "@/components/ui/badge"
 
 export default function CartPage() {
+  const router = useRouter()
   const { items, updateQuantity, removeItem, subtotal, itemCount, clearCart } = useCart()
   const [couponCode, setCouponCode] = useState("")
   const [couponApplied, setCouponApplied] = useState(false)
   const [couponError, setCouponError] = useState(false)
 
-  const shipping = 4.99
   const discount = couponApplied ? subtotal * 0.1 : 0
-  const total = subtotal + shipping - discount
+  const total = subtotal - discount
 
   const handleApplyCoupon = () => {
     if (couponCode.toLowerCase() === "books10") {
@@ -29,6 +30,10 @@ export default function CartPage() {
       setCouponApplied(false)
       setCouponError(true)
     }
+  }
+
+  const handleCheckout = () => {
+    router.push('/checkout')
   }
 
   if (items.length === 0) {
@@ -171,11 +176,12 @@ export default function CartPage() {
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Continue Shopping
               </Link>
-              <Link href="/checkout">
-                <Button className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg">
-                  Proceed to Checkout
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleCheckout}
+                className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg"
+              >
+                Proceed to Checkout
+              </Button>
             </div>
           </div>
 
@@ -189,10 +195,6 @@ export default function CartPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
                     <span className="font-medium">${subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
-                    <span className="font-medium">${shipping.toFixed(2)}</span>
                   </div>
                   {couponApplied && (
                     <div className="flex justify-between text-green-600">
@@ -226,11 +228,12 @@ export default function CartPage() {
                     <p className="text-xs text-gray-500 mt-2">Try "BOOKS10" for 10% off your order</p>
                   </div>
 
-                  <Link href="/checkout" className="block w-full">
-                    <Button className="w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg py-6">
-                      Proceed to Checkout
-                    </Button>
-                  </Link>
+                  <Button 
+                    onClick={handleCheckout}
+                    className="w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg py-6"
+                  >
+                    Proceed to Checkout
+                  </Button>
 
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h3 className="font-medium mb-2 flex items-center">

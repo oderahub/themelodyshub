@@ -17,11 +17,12 @@ import { ChevronLeft, CreditCard, ShieldCheck, Truck } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { PaystackPayment } from "@/components/PaystackPayment"
 
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, clearCart } = useCart()
-  const [paymentMethod, setPaymentMethod] = useState("credit-card")
+  const [paymentMethod, setPaymentMethod] = useState("paystack")
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
@@ -120,6 +121,22 @@ export default function CheckoutPage() {
       setOrderNumber(`ORD-${Math.floor(100000 + Math.random() * 900000)}`)
       clearCart()
     }, 1500)
+  }
+
+  const handlePaystackSuccess = (reference: any) => {
+    setIsSubmitting(true)
+    // Here you would typically verify the payment with your backend
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setOrderComplete(true)
+      setOrderNumber(`ORD-${Math.floor(100000 + Math.random() * 900000)}`)
+      clearCart()
+    }, 1500)
+  }
+
+  const handlePaystackClose = () => {
+    // Handle payment modal close
+    console.log('Payment cancelled')
   }
 
   if (orderComplete) {
@@ -343,122 +360,23 @@ export default function CheckoutPage() {
                     Payment Method
                   </h2>
 
-                  <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-4 mb-6">
-                    <div className="flex items-center space-x-2 border rounded-md p-4 cursor-pointer hover:border-[#5c87c7] transition-colors">
-                      <RadioGroupItem value="credit-card" id="credit-card" />
-                      <Label htmlFor="credit-card" className="flex-1 cursor-pointer">
-                        <div className="flex items-center">
-                          <span className="font-medium">Credit / Debit Card</span>
-                          <div className="ml-auto flex space-x-2">
-                            <Image
-                              src="/placeholder.svg?height=30&width=40&text=Visa"
-                              alt="Visa"
-                              width={40}
-                              height={30}
-                              className="h-6 w-auto"
-                            />
-                            <Image
-                              src="/placeholder.svg?height=30&width=40&text=MC"
-                              alt="Mastercard"
-                              width={40}
-                              height={30}
-                              className="h-6 w-auto"
-                            />
-                            <Image
-                              src="/placeholder.svg?height=30&width=40&text=Amex"
-                              alt="American Express"
-                              width={40}
-                              height={30}
-                              className="h-6 w-auto"
-                            />
-                          </div>
-                        </div>
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-md p-4 cursor-pointer hover:border-[#5c87c7] transition-colors">
-                      <RadioGroupItem value="paypal" id="paypal" />
-                      <Label htmlFor="paypal" className="flex-1 cursor-pointer">
-                        <div className="flex items-center">
-                          <span className="font-medium">PayPal</span>
-                          <Image
-                            src="/placeholder.svg?height=30&width=80&text=PayPal"
-                            alt="PayPal"
-                            width={80}
-                            height={30}
-                            className="h-6 w-auto ml-auto"
-                          />
-                        </div>
-                      </Label>
+                  <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="paystack" id="paystack" />
+                      <Label htmlFor="paystack">Pay with Paystack</Label>
                     </div>
                   </RadioGroup>
 
-                  {paymentMethod === "credit-card" && (
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="cardName">Cardholder Name</Label>
-                        <Input
-                          id="cardName"
-                          name="cardName"
-                          value={formState.cardName}
-                          onChange={handleInputChange}
-                          className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                            formErrors.cardName ? "border-red-500" : ""
-                          }`}
-                        />
-                        {formErrors.cardName && <p className="text-red-500 text-sm">{formErrors.cardName}</p>}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="cardNumber">Card Number</Label>
-                        <Input
-                          id="cardNumber"
-                          name="cardNumber"
-                          value={formState.cardNumber}
-                          onChange={handleInputChange}
-                          placeholder="XXXX XXXX XXXX XXXX"
-                          className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                            formErrors.cardNumber ? "border-red-500" : ""
-                          }`}
-                        />
-                        {formErrors.cardNumber && <p className="text-red-500 text-sm">{formErrors.cardNumber}</p>}
-                      </div>
-                      <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="expiryDate">Expiry Date</Label>
-                          <Input
-                            id="expiryDate"
-                            name="expiryDate"
-                            value={formState.expiryDate}
-                            onChange={handleInputChange}
-                            placeholder="MM/YY"
-                            className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                              formErrors.expiryDate ? "border-red-500" : ""
-                            }`}
-                          />
-                          {formErrors.expiryDate && <p className="text-red-500 text-sm">{formErrors.expiryDate}</p>}
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="cvv">CVV</Label>
-                          <Input
-                            id="cvv"
-                            name="cvv"
-                            value={formState.cvv}
-                            onChange={handleInputChange}
-                            placeholder="123"
-                            className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                              formErrors.cvv ? "border-red-500" : ""
-                            }`}
-                          />
-                          {formErrors.cvv && <p className="text-red-500 text-sm">{formErrors.cvv}</p>}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {paymentMethod === "paypal" && (
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">
-                        You will be redirected to PayPal to complete your purchase securely.
-                      </p>
+                  {paymentMethod === "paystack" && (
+                    <div className="mt-6">
+                      <PaystackPayment
+                        email={formState.email}
+                        amount={total}
+                        onSuccess={handlePaystackSuccess}
+                        onClose={handlePaystackClose}
+                        firstName={formState.firstName}
+                        lastName={formState.lastName}
+                      />
                     </div>
                   )}
                 </CardContent>
