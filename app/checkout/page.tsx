@@ -116,7 +116,7 @@ export default function CheckoutPage() {
     }
 
     // Phone validation
-    if (formState.phone && !/^\d{10}$/.test(formState.phone.replace(/[^0-9]/g, ''))) {
+    if (formState.phone && !/^\d{11}$/.test(formState.phone.replace(/[^0-9]/g, ''))) {
       errors.phone = 'Please enter a valid 10-digit phone number'
     }
 
