@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { ChevronLeft, CreditCard, ShieldCheck, Truck } from 'lucide-react'
+import { ChevronLeft, CreditCard, ShieldCheck } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Select,
@@ -37,10 +37,7 @@ export default function CheckoutPage() {
     lastName: '',
     email: '',
     phone: '',
-    address: '',
-    city: '',
-    state: '',
-    country: 'United States',
+    country: 'Nigeria', // Default to Nigeria for NGN
     cardName: '',
     cardNumber: '',
     expiryDate: '',
@@ -58,14 +55,11 @@ export default function CheckoutPage() {
     setIsBrowser(true)
   }, [])
 
-  const shipping = 4.99
-  const tax = subtotal * 0.07
-  const total = subtotal + shipping + tax
+  const total = subtotal // No shipping or tax for e-books
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
-    // Clear error when user types
     if (formErrors[name]) {
       setFormErrors((prev) => {
         const newErrors = { ...prev }
@@ -85,17 +79,7 @@ export default function CheckoutPage() {
 
   const validateForm = () => {
     const errors: Record<string, string> = {}
-    const requiredFields = [
-      'firstName',
-      'lastName',
-      'email',
-      'phone',
-      'address',
-      'city',
-      'state',
-      'zipCode',
-      'country'
-    ]
+    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'country']
 
     requiredFields.forEach((field) => {
       if (!formState[field as keyof typeof formState]) {
@@ -115,9 +99,9 @@ export default function CheckoutPage() {
       errors.email = 'Please enter a valid email address'
     }
 
-    // Phone validation
+    // Phone validation (for Nigerian numbers, 11 digits including leading 0)
     if (formState.phone && !/^\d{11}$/.test(formState.phone.replace(/[^0-9]/g, ''))) {
-      errors.phone = 'Please enter a valid 10-digit phone number'
+      errors.phone = 'Please enter a valid 11-digit phone number'
     }
 
     // Card number validation
@@ -149,7 +133,7 @@ export default function CheckoutPage() {
 
   const handlePaystackSuccess = (reference: any) => {
     setIsSubmitting(true)
-    // Here you would typically verify the payment with your backend
+    // Verify payment with backend in production
     setTimeout(() => {
       setIsSubmitting(false)
       setOrderComplete(true)
@@ -159,7 +143,6 @@ export default function CheckoutPage() {
   }
 
   const handlePaystackClose = () => {
-    // Handle payment modal close
     console.log('Payment cancelled')
   }
 
@@ -243,8 +226,8 @@ export default function CheckoutPage() {
               <Card className="mb-8">
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-6 flex items-center">
-                    <Truck className="mr-2 h-5 w-5 text-[#5c87c7]" />
-                    Shipping Information
+                    <CreditCard className="mr-2 h-5 w-5 text-[#5c87c7]" />
+                    Billing Information
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -309,64 +292,6 @@ export default function CheckoutPage() {
                         <p className="text-red-500 text-sm">{formErrors.phone}</p>
                       )}
                     </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="address">Street Address</Label>
-                      <Input
-                        id="address"
-                        name="address"
-                        value={formState.address}
-                        onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.address ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {formErrors.address && (
-                        <p className="text-red-500 text-sm">{formErrors.address}</p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input
-                        id="city"
-                        name="city"
-                        value={formState.city}
-                        onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.city ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {formErrors.city && <p className="text-red-500 text-sm">{formErrors.city}</p>}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="state">State / Province</Label>
-                      <Input
-                        id="state"
-                        name="state"
-                        value={formState.state}
-                        onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.state ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {formErrors.state && (
-                        <p className="text-red-500 text-sm">{formErrors.state}</p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="zipCode">ZIP / Postal Code</Label>
-                      <Input
-                        id="zipCode"
-                        name="zipCode"
-                        value={formState.zipCode}
-                        onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.zipCode ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {formErrors.zipCode && (
-                        <p className="text-red-500 text-sm">{formErrors.zipCode}</p>
-                      )}
-                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">Country</Label>
                       <Select
@@ -382,12 +307,10 @@ export default function CheckoutPage() {
                           <SelectValue placeholder="Select a country" />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="Nigeria">Nigeria</SelectItem>
                           <SelectItem value="United States">United States</SelectItem>
                           <SelectItem value="Canada">Canada</SelectItem>
                           <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                          <SelectItem value="Australia">Australia</SelectItem>
-                          <SelectItem value="Germany">Germany</SelectItem>
-                          <SelectItem value="France">France</SelectItem>
                         </SelectContent>
                       </Select>
                       {formErrors.country && (
@@ -491,7 +414,7 @@ export default function CheckoutPage() {
                         <div className="flex justify-between items-center mt-1">
                           <span className="text-sm text-gray-500">Qty: {item.quantity}</span>
                           <span className="font-medium text-[#6055b0]">
-                            ${item.book.price.toFixed(2)}
+                            ₦{item.book.price.toFixed(2)}
                           </span>
                         </div>
                       </div>
@@ -500,22 +423,9 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="space-y-4 mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">${subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
-                    <span className="font-medium">${shipping.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tax (7%)</span>
-                    <span className="font-medium">${tax.toFixed(2)}</span>
-                  </div>
-                  <Separator />
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total</span>
-                    <span className="text-[#6055b0]">${total.toFixed(2)}</span>
+                    <span className="text-[#6055b0]">₦{total.toFixed(2)}</span>
                   </div>
                 </div>
 
