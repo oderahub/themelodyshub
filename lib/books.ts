@@ -39,7 +39,8 @@ export const books: Book[] = [
     price: 27.0,
     originalPrice: 34.99,
     coverImage: '/smart.jpg',
-    description: 'The ultimate guide for African students looking to study abroad, with strategies to maximize opportunities while minimizing costs.',
+    description:
+      'The ultimate guide for African students looking to study abroad, with strategies to maximize opportunities while minimizing costs.',
     longDescription: `"Study Abroad Guide for Africans" is an essential resource for African students with dreams of pursuing international education. This comprehensive guide addresses the unique challenges and opportunities that African students face when applying to universities abroad.
 
 Written by experienced education consultants with firsthand knowledge of international admissions processes, this book provides practical advice on every aspect of the study abroad journey - from selecting the right programs and universities to securing financial aid and navigating visa applications.
@@ -77,19 +78,22 @@ Whether you're a high school student planning your undergraduate education, a un
         name: 'Aisha Adebayo',
         date: '1 month ago',
         rating: 5,
-        comment: 'This guide was a lifesaver for my study abroad application! The scholarship tips helped me secure funding for my program in Canada.'
+        comment:
+          'This guide was a lifesaver for my study abroad application! The scholarship tips helped me secure funding for my program in Canada.'
       },
       {
         name: 'Chukwuemeka Obi',
         date: '2 months ago',
         rating: 4,
-        comment: 'Very detailed and practical advice. The visa section was particularly helpful, though I wish there was more on Asian universities.'
+        comment:
+          'Very detailed and practical advice. The visa section was particularly helpful, though I wish there was more on Asian universities.'
       },
       {
         name: 'Fatima Diallo',
         date: '3 months ago',
         rating: 5,
-        comment: 'I recommend this to every African student dreaming of studying abroad. The success stories kept me motivated throughout the process.'
+        comment:
+          'I recommend this to every African student dreaming of studying abroad. The success stories kept me motivated throughout the process.'
       }
     ]
   },
@@ -99,8 +103,9 @@ Whether you're a high school student planning your undergraduate education, a un
     slug: 'teen-troubles-real-solutions',
     price: 15.0,
     originalPrice: 19.99,
-    coverImage: '/teen.jpg',
-    description: 'A comprehensive guide to help teenagers and parents navigate the challenges of adolescence with practical, actionable solutions for common problems.',
+    coverImage: '/teen.jpeg',
+    description:
+      'A comprehensive guide to help teenagers and parents navigate the challenges of adolescence with practical, actionable solutions for common problems.',
     longDescription: `"Teen Troubles, Real Solutions" is the definitive guide for parents, educators, and teenagers themselves who are navigating the complex challenges of adolescence. Drawing from years of research and real-world experience, this book offers practical, actionable solutions to the most common problems teenagers face today.
 
 From communication breakdowns and academic pressure to social media challenges and mental health concerns, this book addresses the full spectrum of teenage issues with compassion, understanding, and evidence-based strategies. Each chapter focuses on a specific challenge and provides step-by-step solutions that can be implemented immediately.
@@ -136,19 +141,22 @@ Whether you're a parent struggling to connect with your teen, an educator lookin
         name: 'Thompson Ohaegbulam',
         date: '2 months ago',
         rating: 5,
-        comment: 'This book completely changed my approach to parenting my teenage son. The practical advice was easy to implement and I saw results almost immediately.'
+        comment:
+          'This book completely changed my approach to parenting my teenage son. The practical advice was easy to implement and I saw results almost immediately.'
       },
       {
         name: 'Jamie Sammuel',
         date: '3 months ago',
         rating: 5,
-        comment: 'I was skeptical at first, but this book offers genuine solutions that work in the real world. The chapter on digital boundaries was particularly helpful for our family.'
+        comment:
+          'I was skeptical at first, but this book offers genuine solutions that work in the real world. The chapter on digital boundaries was particularly helpful for our family.'
       },
       {
         name: 'Taylor Darlington',
         date: '4 months ago',
         rating: 4,
-        comment: 'As an educator, I\'ve recommended this book to countless parents. It bridges the communication gap between parents and teens effectively.'
+        comment:
+          "As an educator, I've recommended this book to countless parents. It bridges the communication gap between parents and teens effectively."
       }
     ]
   },
@@ -158,8 +166,9 @@ Whether you're a parent struggling to connect with your teen, an educator lookin
     slug: 'overcoming-procrastination',
     price: 20.0,
     originalPrice: 24.99,
-    coverImage: '/overcoming.jpg',
-    description: 'A practical guide to getting things done, breaking the procrastination cycle, and achieving your goals through proven productivity techniques.',
+    coverImage: '/overcoming.jpeg',
+    description:
+      'A practical guide to getting things done, breaking the procrastination cycle, and achieving your goals through proven productivity techniques.',
     longDescription: `"Overcoming Procrastination" is a transformative guide for anyone who struggles with putting things off, missing deadlines, or feeling overwhelmed by their to-do list. This practical book cuts through the noise of productivity advice to deliver a science-backed system for breaking the procrastination habit once and for all.
 
 Drawing from cognitive psychology, behavioral science, and neuroscience, this book explains why we procrastinate and provides concrete strategies to overcome these natural tendencies. Rather than offering quick fixes or simplistic advice, it presents a comprehensive framework for understanding and addressing the root causes of procrastination.
@@ -197,19 +206,22 @@ Whether you're a student facing assignment deadlines, a professional managing co
         name: 'Michael Brown',
         date: '1 month ago',
         rating: 5,
-        comment: 'This book helped me break my procrastination habits. The Path to Peak Productivity system is a game-changer for anyone struggling with deadlines.'
+        comment:
+          'This book helped me break my procrastination habits. The Path to Peak Productivity system is a game-changer for anyone struggling with deadlines.'
       },
       {
         name: 'Sophie Nguyen',
         date: '2 months ago',
         rating: 4,
-        comment: 'Really insightful and practical. The exercises were useful, though I found some chapters a bit repetitive.'
+        comment:
+          'Really insightful and practical. The exercises were useful, though I found some chapters a bit repetitive.'
       },
       {
         name: 'Raj Patel',
         date: '3 months ago',
         rating: 5,
-        comment: 'As a student, this book was exactly what I needed to stay on top of my assignments. Highly recommend for anyone who feels stuck.'
+        comment:
+          'As a student, this book was exactly what I needed to stay on top of my assignments. Highly recommend for anyone who feels stuck.'
       }
     ]
   }
