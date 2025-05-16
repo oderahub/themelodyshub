@@ -25,14 +25,13 @@ function PaystackPayment({
   >(null)
 
   useEffect(() => {
-    // Dynamically import react-paystack only on the client side
     import('react-paystack')
       .then(({ usePaystackPayment }) => {
         const config = {
           reference: new Date().getTime().toString(),
           email: email,
           amount: amount * 100, // Convert to kobo for NGN
-          currency: 'NGN', // Use NGN as per previous fix
+          currency: 'NGN',
           publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
           metadata: {
             custom_fields: [

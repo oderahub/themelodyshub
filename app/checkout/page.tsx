@@ -1,7 +1,5 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -12,7 +10,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ChevronLeft, CreditCard, ShieldCheck } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -31,17 +28,12 @@ const PaystackPayment = dynamic(() => import('@/components/PaystackPayment'), { 
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, clearCart } = useCart()
-  const [paymentMethod, setPaymentMethod] = useState('paystack')
   const [formState, setFormState] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     country: 'Nigeria', // Default to Nigeria for NGN
-    cardName: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
     saveInfo: false
   })
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
@@ -87,13 +79,6 @@ export default function CheckoutPage() {
       }
     })
 
-    if (paymentMethod === 'credit-card') {
-      if (!formState.cardName) errors.cardName = 'Cardholder name is required'
-      if (!formState.cardNumber) errors.cardNumber = 'Card number is required'
-      if (!formState.expiryDate) errors.expiryDate = 'Expiry date is required'
-      if (!formState.cvv) errors.cvv = 'CVV is required'
-    }
-
     // Email validation
     if (formState.email && !/\S+@\S+\.\S+/.test(formState.email)) {
       errors.email = 'Please enter a valid email address'
@@ -102,11 +87,6 @@ export default function CheckoutPage() {
     // Phone validation (for Nigerian numbers, 11 digits including leading 0)
     if (formState.phone && !/^\d{11}$/.test(formState.phone.replace(/[^0-9]/g, ''))) {
       errors.phone = 'Please enter a valid 11-digit phone number'
-    }
-
-    // Card number validation
-    if (formState.cardNumber && !/^\d{16}$/.test(formState.cardNumber.replace(/[^0-9]/g, ''))) {
-      errors.cardNumber = 'Please enter a valid 16-digit card number'
     }
 
     setFormErrors(errors)
@@ -344,18 +324,7 @@ export default function CheckoutPage() {
                     Payment Method
                   </h2>
 
-                  <RadioGroup
-                    value={paymentMethod}
-                    onValueChange={setPaymentMethod}
-                    className="space-y-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="paystack" id="paystack" />
-                      <Label htmlFor="paystack">Pay with Paystack</Label>
-                    </div>
-                  </RadioGroup>
-
-                  {paymentMethod === 'paystack' && isBrowser && (
+                  {isBrowser && (
                     <div className="mt-6">
                       <PaystackPayment
                         email={formState.email}
