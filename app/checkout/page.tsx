@@ -124,6 +124,13 @@ export default function CheckoutPage() {
 
   const handlePaystackClose = () => {
     console.log('Payment cancelled')
+    setIsSubmitting(false)
+  }
+
+  const handlePaystackError = (error: any) => {
+    console.error('Payment error:', error)
+    setIsSubmitting(false)
+    // You might want to show an error message to the user here
   }
 
   if (orderComplete) {
@@ -331,6 +338,7 @@ export default function CheckoutPage() {
                         amount={total}
                         onSuccess={handlePaystackSuccess}
                         onClose={handlePaystackClose}
+                        onError={handlePaystackError}
                         firstName={formState.firstName}
                         lastName={formState.lastName}
                       />

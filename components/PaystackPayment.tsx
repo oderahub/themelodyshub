@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { PaystackButton } from 'react-paystack'
 
 interface PaystackPaymentProps {
   email: string
   amount: number
   onSuccess: (reference: any) => void
   onClose: () => void
+  onError: (error: any) => void
   firstName: string
   lastName: string
 }
@@ -17,51 +19,78 @@ function PaystackPayment({
   amount,
   onSuccess,
   onClose,
+  onError,
   firstName,
   lastName
 }: PaystackPaymentProps) {
-  const [initializePayment, setInitializePayment] = useState<
-    null | ((onSuccess: any, onClose: any) => void)
-  >(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    import('react-paystack')
-      .then(({ usePaystackPayment }) => {
-        const config = {
-          reference: new Date().getTime().toString(),
-          email: email,
-          amount: amount * 100, // Convert to kobo for NGN
-          currency: 'NGN',
-          publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
-          metadata: {
-            custom_fields: [
-              {
-                display_name: 'Customer Name',
-                variable_name: 'customer_name',
-                value: `${firstName} ${lastName}`
-              }
-            ]
-          }
-        }
-        setInitializePayment(() => usePaystackPayment(config))
-      })
-      .catch((error) => {
-        console.error('Failed to load Paystack:', error)
-      })
-  }, [email, amount, firstName, lastName])
+    const loadPaystack = async () => {
+      try {
+        await import('react-paystack')
+        setIsLoading(false)
+      } catch (err) {
+        setError('Failed to load payment system. Please try again.')
+        console.error('Paystack loading error:', err)
+        setIsLoading(false)
+      }
+    }
 
-  if (!initializePayment) {
-    return <Button disabled>Loading Paystack...</Button>
+    loadPaystack()
+  }, [])
+
+  if (error) {
+    return (
+      <div className="text-red-500 text-sm mb-4">
+        {error}
+        <Button
+          onClick={() => window.location.reload()}
+          className="mt-2 bg-red-500 hover:bg-red-600"
+        >
+          Retry
+        </Button>
+      </div>
+    )
   }
 
-  return (
-    <Button
-      onClick={() => initializePayment(onSuccess, onClose)}
-      className="w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg"
-    >
-      Pay with Paystack
-    </Button>
-  )
+  if (isLoading) {
+    return <Button disabled>Loading payment system...</Button>
+  }
+
+  const PAYSTACK_PUBLIC_KEY = 'pk_test_c6bc9cdd4fb2bfe05f23aae6367c69f710c7541f'
+
+  const componentProps = {
+    reference: new Date().getTime().toString(),
+    email: email,
+    amount: amount * 100, // Convert to kobo for NGN
+    currency: 'NGN',
+    publicKey: PAYSTACK_PUBLIC_KEY,
+    metadata: {
+      custom_fields: [
+        {
+          display_name: 'Customer Name',
+          variable_name: 'customer_name',
+          value: `${firstName} ${lastName}`
+        }
+      ]
+    },
+    text: 'Pay with Paystack',
+    className: 'w-full bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg',
+    onSuccess: onSuccess,
+    onClose: onClose,
+    onError: onError
+  }
+
+  return <PaystackButton {...componentProps} />
+}
+
+// Add TypeScript declaration for the global handler
+declare global {
+  interface Window {
+    handlePaystackPayment?: () => void
+  }
 }
 
 export default PaystackPayment

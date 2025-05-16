@@ -115,15 +115,17 @@ export default function BookDetailsPage() {
             <div className="absolute -inset-4 rounded-lg bg-gradient-to-r from-[#92c4e4] to-[#6055b0] opacity-20 blur-xl"></div>
             <div className="relative book-display perspective">
               <div className="book-3d transform-style preserve-3d rotate-y-30 hover:rotate-y-20 transition-transform duration-700 mx-auto">
-                <Image
-                  src={book.coverImage || '/placeholder.svg'}
-                  alt={book.title}
-                  width={350}
-                  height={525}
-                  className="rounded-md shadow-2xl object-cover w-auto"
-                />
-                {/* <div className="book-3d-spine"></div>
-                <div className="book-3d-side"></div> */}
+                <div className="relative w-[300px] h-[450px] mx-auto">
+                  <Image
+                    src={book.coverImage || '/placeholder.svg'}
+                    alt={book.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    className="rounded-md shadow-2xl object-cover"
+                    priority
+                    unoptimized
+                  />
+                </div>
               </div>
             </div>
             <div className="mt-8 flex justify-center">
@@ -214,21 +216,9 @@ export default function BookDetailsPage() {
                 </span>
               </div>
               <div className="flex items-center">
-                <BookText className="h-5 w-5 text-[#5c87c7] mr-2" />
-                <span className="text-gray-700">
-                  Pages: <span className="font-medium">{book.pages}</span>
-                </span>
-              </div>
-              <div className="flex items-center">
                 <Globe className="h-5 w-5 text-[#5c87c7] mr-2" />
                 <span className="text-gray-700">
                   Language: <span className="font-medium">{book.language}</span>
-                </span>
-              </div>
-              <div className="flex items-center">
-                <Hash className="h-5 w-5 text-[#5c87c7] mr-2" />
-                <span className="text-gray-700">
-                  ISBN: <span className="font-medium">{book.isbn}</span>
                 </span>
               </div>
             </div>

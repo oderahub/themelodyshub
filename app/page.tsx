@@ -145,50 +145,56 @@ export default function Home() {
             </Link>
 
             {/* Mobile menu button */}
-            <button
-              className="md:hidden z-50 text-foreground p-2 rounded-full hover:bg-background/10 transition-all duration-300"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            <div className="md:hidden flex items-center gap-2">
+              <div className="scale-75">
+                <CartButton />
+              </div>
+              <button
+                className="text-foreground p-2 rounded-full hover:bg-background/10 transition-all duration-300"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
 
             {/* Mobile menu */}
             <div
-              className={`fixed inset-0 bg-gradient-to-br from-[#92c4e4] to-[#5c87c7] z-40 flex flex-col items-center justify-center gap-8 transition-all duration-500 ${
-                isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              className={`fixed inset-0 bg-background/95 backdrop-blur-lg z-40 transition-transform duration-300 md:hidden ${
+                isMenuOpen ? 'translate-x-0' : 'translate-x-full'
               }`}
             >
-              <Link
-                href="#books"
-                className="text-xl font-bold text-foreground hover:text-foreground/90 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-foreground hover:after:w-full after:transition-all after:duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Books
-              </Link>
-              <Link
-                href="#about"
-                className="text-xl font-bold text-foreground hover:text-foreground/90 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-foreground hover:after:w-full after:transition-all after:duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About Author
-              </Link>
-              <Link
-                href="#testimonials"
-                className="text-xl font-bold text-foreground hover:text-foreground/90 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-foreground hover:after:w-full after:transition-all after:duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Testimonials
-              </Link>
-              <Link
-                href="#contact"
-                className="text-xl font-bold text-foreground hover:text-foreground/90 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-foreground hover:after:w-full after:transition-all after:duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact
-              </Link>
-              <div className="mt-4">
-                <CartButton />
+              <div className="container h-full flex flex-col py-20">
+                <nav className="flex flex-col gap-6 text-lg">
+                  <Link
+                    href="#books"
+                    className="text-foreground hover:text-[#5c87c7] transition-all duration-300"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Books
+                  </Link>
+                  <Link
+                    href="#about"
+                    className="text-foreground hover:text-[#5c87c7] transition-all duration-300"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    About Author
+                  </Link>
+                  <Link
+                    href="#testimonials"
+                    className="text-foreground hover:text-[#5c87c7] transition-all duration-300"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Testimonials
+                  </Link>
+                  <Link
+                    href="#contact"
+                    className="text-foreground hover:text-[#5c87c7] transition-all duration-300"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Contact
+                  </Link>
+                </nav>
               </div>
             </div>
 
@@ -608,21 +614,21 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  name: 'Sarah Johnson',
+                  name: 'Oluwaseun Adebayo',
                   book: 'Teens Trouble Real Solutions',
                   text: 'This book completely changed how I communicate with my teenage daughter. The practical advice was easy to implement and made an immediate difference.',
                   rating: 5
                 },
                 {
-                  name: 'Michael Chen',
+                  name: 'Chidinma Okonkwo',
                   book: 'How to Source and Get Scholarships',
                   text: 'Thanks to this guide, I secured a full scholarship to study in Germany. The step-by-step approach made the complex application process manageable.',
                   rating: 5
                 },
                 {
-                  name: 'Emma Williams',
-                  book: 'Teens Trouble Real Solutions',
-                  text: 'As a school counselor, I recommend this book to all parents. It offers realistic solutions to common teenage issues that actually work.',
+                  name: 'Obinna Eze',
+                  book: 'Study Abroad Guide for Africans',
+                  text: 'This comprehensive guide helped me navigate the complex process of studying abroad. The scholarship tips were particularly valuable.',
                   rating: 5
                 }
               ].map((testimonial, index) => (
