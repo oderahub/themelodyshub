@@ -58,15 +58,24 @@ export default function BookDetailsPage() {
   }
 
   const handleAddToCart = () => {
-    addItem(book, quantity)
-    toast({
-      title: 'Added to cart',
-      description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${
-        book.title
-      }" added to your cart`,
-      duration: 3000
-    })
-    setQuantity(1)
+    try {
+      addItem(book, quantity)
+      toast({
+        title: "Added to cart",
+        description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${book.title}" added to your cart`,
+        duration: 3000,
+        className: "bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white border-0"
+      })
+      setQuantity(1)
+    } catch (error) {
+      console.error('Error adding item to cart:', error)
+      toast({
+        title: "Error",
+        description: "Failed to add item to cart. Please try again.",
+        variant: "destructive",
+        duration: 3000
+      })
+    }
   }
 
   return (

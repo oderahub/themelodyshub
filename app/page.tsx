@@ -20,6 +20,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { getAllBooks } from '@/lib/books'
 import { CartButton } from '@/components/CartButton'
 import { useCart } from '@/context/cart-context'
+import { useToast } from '@/components/ui/use-toast'
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -42,6 +43,7 @@ export default function Home() {
     contact: false
   })
   const { addItem } = useCart()
+  const { toast } = useToast()
   const books = getAllBooks()
 
   // Refs for intersection observer
@@ -90,6 +92,26 @@ export default function Home() {
       clearTimeout(scatterTimer)
     }
   }, [])
+
+  const handleAddToCart = (book: any) => {
+    try {
+      addItem(book)
+      toast({
+        title: "Added to cart",
+        description: `${book.title} has been added to your cart`,
+        duration: 3000,
+        className: "bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white border-0"
+      })
+    } catch (error) {
+      console.error('Error adding item to cart:', error)
+      toast({
+        title: "Error",
+        description: "Failed to add item to cart. Please try again.",
+        variant: "destructive",
+        duration: 3000
+      })
+    }
+  }
 
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans">
@@ -384,16 +406,9 @@ export default function Home() {
                       <Button
                         className="flex-1 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-foreground hover:opacity-90 hover:shadow-lg hover:translate-y-0.5 border-0 py-6 shadow-md transition-all duration-300 cursor-pointer pointer-events-auto"
                         onClick={(e) => {
-                          console.log('Button clicked - event received')
                           e.preventDefault()
                           e.stopPropagation()
-                          console.log('Add to Cart clicked for book:', book.title)
-                          try {
-                            addItem(book)
-                            console.log('addItem function called successfully')
-                          } catch (error) {
-                            console.error('Error adding item to cart:', error)
-                          }
+                          handleAddToCart(book)
                         }}
                       >
                         <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart

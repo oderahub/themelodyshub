@@ -23,7 +23,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import dynamic from 'next/dynamic'
 
 // Import PaystackPayment component dynamically with SSR disabled
-const PaystackPayment = dynamic(() => import('@/components/PaystackPayment'), { ssr: false })
+const PaystackPayment = dynamic(() => import('@/components/PaystackPayment'), {
+  ssr: false,
+  loading: () => <Button disabled>Loading payment system...</Button>
+})
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -40,11 +43,10 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
   const [orderNumber, setOrderNumber] = useState('')
-  const [isBrowser, setIsBrowser] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
-  // Set isBrowser to true once the component is mounted
   useEffect(() => {
-    setIsBrowser(true)
+    setIsClient(true)
   }, [])
 
   const total = subtotal // No shipping or tax for e-books
@@ -331,7 +333,7 @@ export default function CheckoutPage() {
                     Payment Method
                   </h2>
 
-                  {isBrowser && (
+                  {isClient && (
                     <div className="mt-6">
                       <PaystackPayment
                         email={formState.email}
@@ -384,6 +386,7 @@ export default function CheckoutPage() {
                           alt={item.book.title}
                           fill
                           className="object-cover"
+                          unoptimized
                         />
                       </div>
                       <div className="flex-1">
