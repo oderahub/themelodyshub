@@ -1,51 +1,56 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useCart } from "@/context/cart-context"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ChevronLeft, CreditCard, ShieldCheck, Truck } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import dynamic from "next/dynamic"
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useCart } from '@/context/cart-context'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { ChevronLeft, CreditCard, ShieldCheck, Truck } from 'lucide-react'
+import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import dynamic from 'next/dynamic'
 
 // Import PaystackPayment component dynamically with SSR disabled
-const PaystackPayment = dynamic(() => import("@/components/PaystackPayment"), { ssr: false })
+const PaystackPayment = dynamic(() => import('@/components/PaystackPayment'), { ssr: false })
 
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, clearCart } = useCart()
-  const [paymentMethod, setPaymentMethod] = useState("paystack")
+  const [paymentMethod, setPaymentMethod] = useState('paystack')
   const [formState, setFormState] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "United States",
-    cardName: "",
-    cardNumber: "",
-    expiryDate: "",
-    cvv: "",
-    saveInfo: false,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    country: 'United States',
+    cardName: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    saveInfo: false
   })
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [orderComplete, setOrderComplete] = useState(false)
-  const [orderNumber, setOrderNumber] = useState("")
+  const [orderNumber, setOrderNumber] = useState('')
   const [isBrowser, setIsBrowser] = useState(false)
 
   // Set isBrowser to true once the component is mounted
@@ -80,34 +85,44 @@ export default function CheckoutPage() {
 
   const validateForm = () => {
     const errors: Record<string, string> = {}
-    const requiredFields = ["firstName", "lastName", "email", "phone", "address", "city", "state", "zipCode", "country"]
+    const requiredFields = [
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'address',
+      'city',
+      'state',
+      'zipCode',
+      'country'
+    ]
 
     requiredFields.forEach((field) => {
       if (!formState[field as keyof typeof formState]) {
-        errors[field] = "This field is required"
+        errors[field] = 'This field is required'
       }
     })
 
-    if (paymentMethod === "credit-card") {
-      if (!formState.cardName) errors.cardName = "Cardholder name is required"
-      if (!formState.cardNumber) errors.cardNumber = "Card number is required"
-      if (!formState.expiryDate) errors.expiryDate = "Expiry date is required"
-      if (!formState.cvv) errors.cvv = "CVV is required"
+    if (paymentMethod === 'credit-card') {
+      if (!formState.cardName) errors.cardName = 'Cardholder name is required'
+      if (!formState.cardNumber) errors.cardNumber = 'Card number is required'
+      if (!formState.expiryDate) errors.expiryDate = 'Expiry date is required'
+      if (!formState.cvv) errors.cvv = 'CVV is required'
     }
 
     // Email validation
     if (formState.email && !/\S+@\S+\.\S+/.test(formState.email)) {
-      errors.email = "Please enter a valid email address"
+      errors.email = 'Please enter a valid email address'
     }
 
     // Phone validation
-    if (formState.phone && !/^\d{10}$/.test(formState.phone.replace(/[^0-9]/g, ""))) {
-      errors.phone = "Please enter a valid 10-digit phone number"
+    if (formState.phone && !/^\d{10}$/.test(formState.phone.replace(/[^0-9]/g, ''))) {
+      errors.phone = 'Please enter a valid 10-digit phone number'
     }
 
     // Card number validation
-    if (formState.cardNumber && !/^\d{16}$/.test(formState.cardNumber.replace(/[^0-9]/g, ""))) {
-      errors.cardNumber = "Please enter a valid 16-digit card number"
+    if (formState.cardNumber && !/^\d{16}$/.test(formState.cardNumber.replace(/[^0-9]/g, ''))) {
+      errors.cardNumber = 'Please enter a valid 16-digit card number'
     }
 
     setFormErrors(errors)
@@ -162,7 +177,12 @@ export default function CheckoutPage() {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </div>
             </div>
@@ -175,7 +195,8 @@ export default function CheckoutPage() {
             </p>
             <Alert className="bg-blue-50 border-blue-200 mb-8">
               <AlertDescription>
-                A confirmation email has been sent to <span className="font-medium">{formState.email}</span>
+                A confirmation email has been sent to{' '}
+                <span className="font-medium">{formState.email}</span>
               </AlertDescription>
             </Alert>
             <div className="space-y-4">
@@ -235,10 +256,12 @@ export default function CheckoutPage() {
                         value={formState.firstName}
                         onChange={handleInputChange}
                         className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.firstName ? "border-red-500" : ""
+                          formErrors.firstName ? 'border-red-500' : ''
                         }`}
                       />
-                      {formErrors.firstName && <p className="text-red-500 text-sm">{formErrors.firstName}</p>}
+                      {formErrors.firstName && (
+                        <p className="text-red-500 text-sm">{formErrors.firstName}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="lastName">Last Name</Label>
@@ -248,10 +271,12 @@ export default function CheckoutPage() {
                         value={formState.lastName}
                         onChange={handleInputChange}
                         className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.lastName ? "border-red-500" : ""
+                          formErrors.lastName ? 'border-red-500' : ''
                         }`}
                       />
-                      {formErrors.lastName && <p className="text-red-500 text-sm">{formErrors.lastName}</p>}
+                      {formErrors.lastName && (
+                        <p className="text-red-500 text-sm">{formErrors.lastName}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address</Label>
@@ -261,9 +286,13 @@ export default function CheckoutPage() {
                         type="email"
                         value={formState.email}
                         onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${formErrors.email ? "border-red-500" : ""}`}
+                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
+                          formErrors.email ? 'border-red-500' : ''
+                        }`}
                       />
-                      {formErrors.email && <p className="text-red-500 text-sm">{formErrors.email}</p>}
+                      {formErrors.email && (
+                        <p className="text-red-500 text-sm">{formErrors.email}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number</Label>
@@ -272,9 +301,13 @@ export default function CheckoutPage() {
                         name="phone"
                         value={formState.phone}
                         onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${formErrors.phone ? "border-red-500" : ""}`}
+                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
+                          formErrors.phone ? 'border-red-500' : ''
+                        }`}
                       />
-                      {formErrors.phone && <p className="text-red-500 text-sm">{formErrors.phone}</p>}
+                      {formErrors.phone && (
+                        <p className="text-red-500 text-sm">{formErrors.phone}</p>
+                      )}
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="address">Street Address</Label>
@@ -284,10 +317,12 @@ export default function CheckoutPage() {
                         value={formState.address}
                         onChange={handleInputChange}
                         className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.address ? "border-red-500" : ""
+                          formErrors.address ? 'border-red-500' : ''
                         }`}
                       />
-                      {formErrors.address && <p className="text-red-500 text-sm">{formErrors.address}</p>}
+                      {formErrors.address && (
+                        <p className="text-red-500 text-sm">{formErrors.address}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="city">City</Label>
@@ -296,7 +331,9 @@ export default function CheckoutPage() {
                         name="city"
                         value={formState.city}
                         onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${formErrors.city ? "border-red-500" : ""}`}
+                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
+                          formErrors.city ? 'border-red-500' : ''
+                        }`}
                       />
                       {formErrors.city && <p className="text-red-500 text-sm">{formErrors.city}</p>}
                     </div>
@@ -307,9 +344,13 @@ export default function CheckoutPage() {
                         name="state"
                         value={formState.state}
                         onChange={handleInputChange}
-                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${formErrors.state ? "border-red-500" : ""}`}
+                        className={`border-[#92c4e4] focus:border-[#5c87c7] ${
+                          formErrors.state ? 'border-red-500' : ''
+                        }`}
                       />
-                      {formErrors.state && <p className="text-red-500 text-sm">{formErrors.state}</p>}
+                      {formErrors.state && (
+                        <p className="text-red-500 text-sm">{formErrors.state}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="zipCode">ZIP / Postal Code</Label>
@@ -319,18 +360,23 @@ export default function CheckoutPage() {
                         value={formState.zipCode}
                         onChange={handleInputChange}
                         className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                          formErrors.zipCode ? "border-red-500" : ""
+                          formErrors.zipCode ? 'border-red-500' : ''
                         }`}
                       />
-                      {formErrors.zipCode && <p className="text-red-500 text-sm">{formErrors.zipCode}</p>}
+                      {formErrors.zipCode && (
+                        <p className="text-red-500 text-sm">{formErrors.zipCode}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">Country</Label>
-                      <Select value={formState.country} onValueChange={(value) => handleSelectChange("country", value)}>
+                      <Select
+                        value={formState.country}
+                        onValueChange={(value) => handleSelectChange('country', value)}
+                      >
                         <SelectTrigger
                           id="country"
                           className={`border-[#92c4e4] focus:border-[#5c87c7] ${
-                            formErrors.country ? "border-red-500" : ""
+                            formErrors.country ? 'border-red-500' : ''
                           }`}
                         >
                           <SelectValue placeholder="Select a country" />
@@ -344,13 +390,19 @@ export default function CheckoutPage() {
                           <SelectItem value="France">France</SelectItem>
                         </SelectContent>
                       </Select>
-                      {formErrors.country && <p className="text-red-500 text-sm">{formErrors.country}</p>}
+                      {formErrors.country && (
+                        <p className="text-red-500 text-sm">{formErrors.country}</p>
+                      )}
                     </div>
                   </div>
 
                   <div className="mt-6">
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="saveInfo" checked={formState.saveInfo} onCheckedChange={handleCheckboxChange} />
+                      <Checkbox
+                        id="saveInfo"
+                        checked={formState.saveInfo}
+                        onCheckedChange={handleCheckboxChange}
+                      />
                       <label
                         htmlFor="saveInfo"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -369,14 +421,18 @@ export default function CheckoutPage() {
                     Payment Method
                   </h2>
 
-                  <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-4">
+                  <RadioGroup
+                    value={paymentMethod}
+                    onValueChange={setPaymentMethod}
+                    className="space-y-4"
+                  >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="paystack" id="paystack" />
                       <Label htmlFor="paystack">Pay with Paystack</Label>
                     </div>
                   </RadioGroup>
 
-                  {paymentMethod === "paystack" && isBrowser && (
+                  {paymentMethod === 'paystack' && isBrowser && (
                     <div className="mt-6">
                       <PaystackPayment
                         email={formState.email}
@@ -392,7 +448,10 @@ export default function CheckoutPage() {
               </Card>
 
               <div className="flex justify-between items-center">
-                <Link href="/cart" className="inline-flex items-center text-[#5c87c7] hover:underline">
+                <Link
+                  href="/cart"
+                  className="inline-flex items-center text-[#5c87c7] hover:underline"
+                >
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Return to Cart
                 </Link>
@@ -401,7 +460,7 @@ export default function CheckoutPage() {
                   className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-lg px-8 py-6"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Processing..." : "Complete Order"}
+                  {isSubmitting ? 'Processing...' : 'Complete Order'}
                 </Button>
               </div>
             </form>
@@ -415,10 +474,13 @@ export default function CheckoutPage() {
 
                 <div className="max-h-80 overflow-y-auto mb-6 pr-2">
                   {items.map((item) => (
-                    <div key={item.book.id} className="flex gap-3 mb-4 pb-4 border-b last:border-0 last:pb-0">
+                    <div
+                      key={item.book.id}
+                      className="flex gap-3 mb-4 pb-4 border-b last:border-0 last:pb-0"
+                    >
                       <div className="w-16 h-24 relative flex-shrink-0 overflow-hidden rounded-md">
                         <Image
-                          src={item.book.coverImage || "/placeholder.svg"}
+                          src={item.book.coverImage || '/placeholder.svg'}
                           alt={item.book.title}
                           fill
                           className="object-cover"
@@ -428,7 +490,9 @@ export default function CheckoutPage() {
                         <p className="font-medium text-sm line-clamp-2">{item.book.title}</p>
                         <div className="flex justify-between items-center mt-1">
                           <span className="text-sm text-gray-500">Qty: {item.quantity}</span>
-                          <span className="font-medium text-[#6055b0]">${item.book.price.toFixed(2)}</span>
+                          <span className="font-medium text-[#6055b0]">
+                            ${item.book.price.toFixed(2)}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -461,7 +525,8 @@ export default function CheckoutPage() {
                     Secure Checkout
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Your payment information is processed securely. We do not store credit card details.
+                    Your payment information is processed securely. We do not store credit card
+                    details.
                   </p>
                 </div>
               </CardContent>

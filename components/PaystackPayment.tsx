@@ -1,33 +1,41 @@
-import { usePaystackPayment } from 'react-paystack';
-import { Button } from "@/components/ui/button";
+import { usePaystackPayment } from 'react-paystack'
+import { Button } from '@/components/ui/button'
 
 interface PaystackPaymentProps {
-  email: string;
-  amount: number;
-  onSuccess: (reference: any) => void;
-  onClose: () => void;
-  firstName: string;
-  lastName: string;
+  email: string
+  amount: number
+  onSuccess: (reference: any) => void
+  onClose: () => void
+  firstName: string
+  lastName: string
 }
 
-export function PaystackPayment({ email, amount, onSuccess, onClose, firstName, lastName }: PaystackPaymentProps) {
+function PaystackPayment({
+  email,
+  amount,
+  onSuccess,
+  onClose,
+  firstName,
+  lastName
+}: PaystackPaymentProps) {
   const config = {
-    reference: (new Date()).getTime().toString(),
+    reference: new Date().getTime().toString(),
     email: email,
-    amount: amount * 100, // Convert to kobo/cents
+    amount: amount * 100, // Convert to cents for USD (or kobo for NGN)
+    currency: 'NGN', // Use a valid Paystack currency code (e.g., 'NGN' or 'USD')
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
     metadata: {
       custom_fields: [
         {
-          display_name: "Customer Name",
-          variable_name: "customer_name",
+          display_name: 'Customer Name',
+          variable_name: 'customer_name',
           value: `${firstName} ${lastName}`
         }
       ]
     }
-  };
+  }
 
-  const initializePayment = usePaystackPayment(config);
+  const initializePayment = usePaystackPayment(config)
 
   return (
     <Button
@@ -36,5 +44,7 @@ export function PaystackPayment({ email, amount, onSuccess, onClose, firstName, 
     >
       Pay with Paystack
     </Button>
-  );
-} 
+  )
+}
+
+export default PaystackPayment
