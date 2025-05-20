@@ -21,6 +21,7 @@ import { getAllBooks } from '@/lib/books'
 import { CartButton } from '@/components/CartButton'
 import { useCart } from '@/context/cart-context'
 import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -45,6 +46,7 @@ export default function Home() {
   const { addItem } = useCart()
   const { toast } = useToast()
   const books = getAllBooks()
+  const router = useRouter()
 
   // Refs for intersection observer
   const sectionsRef = useRef([])
@@ -97,17 +99,19 @@ export default function Home() {
     try {
       addItem(book)
       toast({
-        title: "Added to cart",
+        title: 'Added to cart',
         description: `${book.title} has been added to your cart`,
         duration: 3000,
-        className: "bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white border-0"
+        className: 'bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white border-0'
       })
+      // Add this line to redirect to cart page
+      router.push('/cart')
     } catch (error) {
       console.error('Error adding item to cart:', error)
       toast({
-        title: "Error",
-        description: "Failed to add item to cart. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to add item to cart. Please try again.',
+        variant: 'destructive',
         duration: 3000
       })
     }
@@ -193,7 +197,7 @@ export default function Home() {
                     className="text-foreground hover:text-[#5c87c7] transition-all duration-300"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Books
+                    E-Books
                   </Link>
                   <Link
                     href="#about"
@@ -226,7 +230,7 @@ export default function Home() {
                 href="#books"
                 className="text-md font-medium text-foreground hover:text-[#5c87c7] transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#5c87c7] hover:after:w-full after:transition-all after:duration-300"
               >
-                Books
+                E-Books
               </Link>
               <Link
                 href="#about"
@@ -363,7 +367,7 @@ export default function Home() {
               }`}
             >
               <Badge className="bg-gradient-to-r from-[#92c4e4] to-[#5c87c7] text-white hover:opacity-90 px-4 py-1.5 text-sm border-0 mb-4 shadow-md">
-                Featured Books
+                Featured E-Books
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent">
                 Our Collection
@@ -439,7 +443,7 @@ export default function Home() {
                 size="lg"
                 className="bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white hover:opacity-90 hover:shadow-xl hover:translate-y-0.5 border-0 text-lg px-8 py-6 shadow-lg transition-all duration-300 group"
               >
-                View All Books
+                View All E-Books
                 <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
             </div>
@@ -562,7 +566,7 @@ export default function Home() {
                   About the Author
                 </Badge>
                 <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#5c87c7] to-[#6055b0] bg-clip-text text-transparent">
-                  Meet the Expert Behind the Books
+                  Meet the Expert Behind the E-Books
                 </h2>
                 <p className="text-foreground text-lg leading-relaxed">
                   Melody Okere is a dedicated author with a background in business and technology,
@@ -571,7 +575,7 @@ export default function Home() {
                   their goals, and navigate life's important decisions with confidence.
                 </p>
                 <p className="text-foreground text-lg leading-relaxed">
-                  Each book is crafted with care, drawing from personal experiences and a deep
+                  Each E-book is crafted with care, drawing from personal experiences and a deep
                   understanding of the challenges faced by teens and scholarship seekers. The
                   practical advice and strategies have been tested and proven effective in
                   real-world situations.
@@ -622,7 +626,7 @@ export default function Home() {
                 What Readers Say
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-                Discover why readers around the world love our books.
+                Discover why readers around the world love our E-books.
               </p>
             </div>
 
@@ -637,7 +641,7 @@ export default function Home() {
                 {
                   name: 'Chidinma Okonkwo',
                   book: 'How to Source and Get Scholarships',
-                  text: 'Thanks to this guide, I secured a full scholarship to study in Germany. The step-by-step approach made the complex application process manageable.',
+                  text: 'Thanks to the author for writing this eye opening book, it helped me a lot.',
                   rating: 5
                 },
                 {
@@ -866,7 +870,7 @@ export default function Home() {
                       href="#books"
                       className="text-foreground/80 hover:text-foreground transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-foreground hover:after:w-full after:transition-all after:duration-300"
                     >
-                      Books
+                      E-Books
                     </Link>
                   </li>
                   <li>

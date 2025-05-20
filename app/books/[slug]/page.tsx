@@ -30,6 +30,7 @@ import {
   DialogTitle,
   DialogDescription
 } from '@/components/ui/dialog'
+import { useRouter } from 'next/navigation'
 
 export default function BookDetailsPage() {
   console.log('BookDetailsPage component rendering')
@@ -42,6 +43,7 @@ export default function BookDetailsPage() {
   const [activeTab, setActiveTab] = useState('details')
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   useEffect(() => {
     if (slug) {
@@ -61,18 +63,22 @@ export default function BookDetailsPage() {
     try {
       addItem(book, quantity)
       toast({
-        title: "Added to cart",
-        description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${book.title}" added to your cart`,
+        title: 'Added to cart',
+        description: `${quantity} ${quantity === 1 ? 'copy' : 'copies'} of "${
+          book.title
+        }" added to your cart`,
         duration: 3000,
-        className: "bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white border-0"
+        className: 'bg-gradient-to-r from-[#5c87c7] to-[#6055b0] text-white border-0'
       })
       setQuantity(1)
+      // Add this line to redirect to cart page
+      router.push('/cart')
     } catch (error) {
       console.error('Error adding item to cart:', error)
       toast({
-        title: "Error",
-        description: "Failed to add item to cart. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to add item to cart. Please try again.',
+        variant: 'destructive',
         duration: 3000
       })
     }
@@ -108,7 +114,7 @@ export default function BookDetailsPage() {
             </Link>
             <span className="mx-2">/</span>
             <Link href="/#books" className="hover:text-[#5c87c7] transition-colors">
-              Books
+              E-Books
             </Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900 font-medium">{book.title}</span>
@@ -143,7 +149,7 @@ export default function BookDetailsPage() {
                 onClick={() => setIsPreviewOpen(true)}
               >
                 <BookOpen className="mr-2 h-4 w-4" />
-                Preview Book
+                Preview E-Book
               </Button>
             </div>
           </div>
